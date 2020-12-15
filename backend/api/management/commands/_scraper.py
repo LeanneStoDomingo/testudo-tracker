@@ -20,8 +20,20 @@ def get_departments():
     return departments
 
 
-def get_courses():
-    pass
+def get_courses(semester, department):
+    courses = list()
+
+    page = requests.get(f'{BASE_URL}{semester}/{department}').text
+    soup = BeautifulSoup(page, 'html.parser')
+    courses_soup = soup.find_all(class_='course')
+
+    for course in courses_soup:
+        code = course.find(class_='course-id').text
+        name = course.find(class_='course-title').text
+        description = course.find(class_='approved-course-text').text
+        courses.append({'code': code, 'name': name, 'description': description})
+
+    return courses
 
 
 def get_sections():
