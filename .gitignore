@@ -4,6 +4,9 @@ testudo-tracker/
 # Environment variables
 backend/backend/.env
 
+# VSCode settings
+.vscode/
+
 # Below - boilerplate .gitignore for python
 
 # Byte-compiled / optimized / DLL files

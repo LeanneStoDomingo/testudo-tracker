@@ -7,12 +7,21 @@ from . import _scraper as scraper
 class Command(BaseCommand):
     help = 'Populates the database with information from Testudo.'
 
-    def handle(self, *args, **kwargs):
-        departments = scraper.get_departments()
+    def add_arguments(self, parser):
+        parser.add_argument('type', type=str, choices=['departments', 'courses'], help='Scrapes Testudo to populate the database')
+        parser.add_argument('--semester', type=int, help='--courses uses this argument to scrape the correct semester')
 
-        for department in departments:
-            try:
-                d = Department(code=department['code'], name=department['name'])
-                d.save()
-            except IntegrityError as e:
-                print(f'IntegrityError: {str(e)}')
+    def handle(self, *args, **options):
+        if (options['type'] == 'departments'):
+            departments = scraper.get_departments()
+
+            for department in departments:
+                try:
+                    d = Department(code=department['code'], name=department['name'])
+                    d.save()
+                except IntegrityError as e:
+                    print(f'IntegrityError: {str(e)}')
+        elif (options['type'] == 'courses'):
+            pass
+        else:
+            self.stdout.write(self.style.ERROR('Either \'departments\' or \'courses\' has to be chosen'))
