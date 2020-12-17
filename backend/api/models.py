@@ -38,10 +38,10 @@ class Course(models.Model):
 
 class Semester(models.Model):
     year = models.IntegerField()
-    season = models.CharField(max_length=2, choices=((1, '01'), (2, '08')))
+    month = models.CharField(max_length=2, choices=((1, '01'), (2, '08')))
 
     def __str__(self):
-        return f'{str(self.year)}{self.season}'
+        return f'{str(self.year)}{self.month}'
 
 
 class Section(models.Model):

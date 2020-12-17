@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import re
 
 BASE_URL = 'https://app.testudo.umd.edu/soc/'
 
@@ -20,6 +21,26 @@ def get_departments():
     return departments
 
 
+def _remove_whitespace(text):
+    text = re.sub('^\s+', '', text)
+    text = re.sub('\s+$', '', text)
+    return text
+
+
+def get_geneds():
+    geneds = list()
+
+    page = requests.get(f'{BASE_URL}gen-ed').text
+    soup = BeautifulSoup(page, 'html.parser')
+    geneds_soup = soup.find_all(class_='subcategory')
+
+    for gened in geneds_soup:
+        code = re.search('(?<=\()\w{4}(?=\))', _remove_whitespace(gened.text)).group()
+        name = re.search('^(.+?)(?=\s\()', _remove_whitespace(gened.text)).group()
+
+        geneds.append({'code': code, 'name': name})
+
+
 def get_courses(semester, department):
     courses = list()
 
@@ -31,6 +52,7 @@ def get_courses(semester, department):
         code = course.find(class_='course-id').text
         name = course.find(class_='course-title').text
         description = course.find(class_='approved-course-text').text
+
         courses.append({'code': code, 'name': name, 'description': description})
 
     return courses
