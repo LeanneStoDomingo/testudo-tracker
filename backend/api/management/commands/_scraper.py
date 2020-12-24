@@ -51,12 +51,46 @@ def get_courses(semester, department):
     for course in courses_soup:
         code = course.find(class_='course-id').text
         name = course.find(class_='course-title').text
+
+        geneds = list()
+        geneds_soup = course.find_all(class_='course-subcategory')
+        for gened in geneds_soup:
+            geneds.append(gened.text)
+
         description = course.find(class_='approved-course-text').text
 
-        courses.append({'code': code, 'name': name, 'description': description})
+        courses.append({'code': code, 'name': name, 'geneds': geneds, 'description': description})
 
     return courses
 
 
-def get_sections():
-    pass
+def get_sections(semester, course):
+    sections = list()
+
+    page = requests.get(f'{BASE_URL}{semester}/{course[:4]}/{course}').text
+    soup = BeautifulSoup(page, 'html.parser')
+    course_soup = soup.find(id=course)
+    sections_soup = course_soup.find_all(class_='section')
+
+    for section in sections_soup:
+        code = section.find(class_='section-id').text
+        total_seats = section.find(class_='').text
+        open_seats = section.find(class_='').text
+        waitlist = section.find(class_='').text
+        holdfile = section.find(class_='').text
+
+        professors = list()
+        professors_soup = section.find_all(class_='section-instructor')
+        for professor in professors_soup:
+            professors.append(professor.text)
+
+        sections.append({
+            'code': code,
+            'professors': professors,
+            'total_seats': total_seats,
+            'open_seats': open_seats,
+            'waitlist': waitlist,
+            'holdfile': holdfile
+        })
+
+    return sections
