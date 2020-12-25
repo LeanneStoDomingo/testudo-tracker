@@ -25,9 +25,9 @@ class Command(BaseCommand):
 
         # adds new semester to Semester table
         if (options['semester'][0].lower() == 'fall'):
-            semester = '08'
+            month = '08'
         elif (options['semester'][0].lower() == 'spring'):
-            semester = '01'
+            month = '01'
         else:
             self.stdout.write(self.style.ERROR('The first argument for the semester argument has to be either fall or spring'))
             return
@@ -35,7 +35,7 @@ class Command(BaseCommand):
         try:
             Semester.objects.create(
                 year=options['semester'][1],
-                month=semester,
+                month=month,
                 start_date=options['start_date'],
                 end_date=options['end_date']
             )

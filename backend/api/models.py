@@ -38,9 +38,9 @@ class GenEd(models.Model):
 class Course(models.Model):
     code = models.CharField(max_length=8, unique=True)
     name = models.CharField(max_length=100)
-    description = models.CharField(max_length=1000)
+    description = models.CharField(max_length=1000, blank=True)
     department = models.ForeignKey(Department, on_delete=models.PROTECT)
-    gened = models.ManyToManyField(GenEd)
+    geneds = models.ManyToManyField(GenEd, blank=True)
 
     class Meta:
         ordering = ['code']
@@ -62,7 +62,7 @@ class Professor(models.Model):
 class Section(models.Model):
     code = models.CharField(max_length=4)
     course = models.ForeignKey(Course, on_delete=models.PROTECT)
-    professor = models.ManyToManyField(Professor)
+    professors = models.ManyToManyField(Professor)
 
     def __str__(self):
         return self.code

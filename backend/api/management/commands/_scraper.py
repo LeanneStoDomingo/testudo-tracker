@@ -76,8 +76,8 @@ def get_sections(semester, course):
         code = section.find(class_='section-id').text
         total_seats = section.find(class_='').text
         open_seats = section.find(class_='').text
-        waitlist = section.find(class_='').text
-        holdfile = section.find(class_='').text
+        waitlist_seats = section.find(class_='').text
+        holdfile_seats = section.find(class_='').text
 
         professors = list()
         professors_soup = section.find_all(class_='section-instructor')
@@ -89,8 +89,8 @@ def get_sections(semester, course):
             'professors': professors,
             'total_seats': total_seats,
             'open_seats': open_seats,
-            'waitlist': waitlist,
-            'holdfile': holdfile
+            'waitlist_seats': waitlist_seats,
+            'holdfile_seats': holdfile_seats or 0
         })
 
     return sections
