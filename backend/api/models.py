@@ -37,8 +37,8 @@ class GenEd(models.Model):
 
 class Course(models.Model):
     code = models.CharField(max_length=8, unique=True)
-    name = models.CharField(max_length=100)
-    description = models.CharField(max_length=1000, blank=True)
+    name = models.CharField(max_length=200)
+    description = models.CharField(max_length=1500, blank=True)
     department = models.ForeignKey(Department, on_delete=models.PROTECT)
     geneds = models.ManyToManyField(GenEd, blank=True)
 
@@ -63,6 +63,7 @@ class Section(models.Model):
     code = models.CharField(max_length=4)
     course = models.ForeignKey(Course, on_delete=models.PROTECT)
     professors = models.ManyToManyField(Professor)
+    semester = models.ForeignKey(Semester, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.code
@@ -74,5 +75,4 @@ class Day(models.Model):
     open_seats = models.IntegerField()
     waitlist_seats = models.IntegerField()
     holdfile_seats = models.IntegerField()
-    semester = models.ForeignKey(Semester, on_delete=models.PROTECT)
     section = models.ForeignKey(Section, on_delete=models.PROTECT)
