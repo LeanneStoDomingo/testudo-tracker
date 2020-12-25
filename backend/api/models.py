@@ -7,6 +7,7 @@ class Semester(models.Model):
     year = models.IntegerField()
     month = models.CharField(max_length=2, choices=((1, '01'), (2, '08')))
     start_date = models.DateField(unique=True)
+    end_date = models.DateField(unique=True)
 
     class Meta:
         ordering = ['start_date']
