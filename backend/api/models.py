@@ -76,3 +76,6 @@ class Day(models.Model):
     waitlist_seats = models.IntegerField()
     holdfile_seats = models.IntegerField()
     section = models.ForeignKey(Section, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return str(self.day)

@@ -9,8 +9,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         semester_obj = Semester.objects.latest('start_date')
-        start_date = getattr(semester_obj, 'start_date')
-        end_date = getattr(semester_obj, 'end_date')
+        start_date = semester_obj.start_date
+        end_date = semester_obj.end_date
         day = (date.today() - start_date).days
 
         if ((end_date - date.today()).days < 0 or day < 0):
