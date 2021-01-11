@@ -1,6 +1,7 @@
 const App = () => {
   return (
-    <div>
+    <div >
+      Testudo Tracker - Work in Progress
     </div>
   )
 }
