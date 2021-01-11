@@ -1,4 +1,3 @@
-from django.utils.text import slugify
 from django.db.models.aggregates import Max, Sum
 from django.http.response import JsonResponse
 from .models import *
@@ -168,7 +167,7 @@ def search(request):
 
     professor_objs = Professor.objects.all()
     professors = list(professor_objs.values())
-    professors = [{**professor, 'link': f'professors/{slugify(professor["name"])}/',
+    professors = [{**professor, 'link': f'professors/{professor["slug"]}/',
                    'text': f'{professor["name"]}'} for professor in professors]
 
     res = {
