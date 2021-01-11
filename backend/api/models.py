@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.utils.text import slugify
 # Create your models here.
 
 
@@ -8,9 +8,14 @@ class Semester(models.Model):
     month = models.CharField(max_length=2, choices=((1, '01'), (2, '08')))
     start_date = models.DateField(unique=True)
     end_date = models.DateField(unique=True)
+    num_days = models.IntegerField()
 
     class Meta:
         ordering = ['start_date']
+
+    def save(self, *args, **kwargs):
+        self.num_days = (self.end_date - self.start_date).days
+        super(Semester, self).save(*args, **kwargs)
 
     def __str__(self):
         return f'{str(self.year)}{self.month}'
@@ -38,7 +43,6 @@ class GenEd(models.Model):
 class Course(models.Model):
     code = models.CharField(max_length=8, unique=True)
     name = models.CharField(max_length=200)
-    description = models.CharField(max_length=1500, blank=True)
     department = models.ForeignKey(Department, on_delete=models.PROTECT)
     geneds = models.ManyToManyField(GenEd, blank=True)
 
@@ -51,9 +55,14 @@ class Course(models.Model):
 
 class Professor(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=100, unique=True)
 
     class Meta:
         ordering = ['name']
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Professor, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name

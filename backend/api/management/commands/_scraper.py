@@ -63,13 +63,7 @@ def get_courses(semester, department):
         for gened in geneds_soup:
             geneds.append(_remove_whitespace(gened.find('a').text))
 
-        # not all courses have 'approved-course-text'
-        try:
-            description = course.find(class_='approved-course-text').text
-        except:
-            description = ''
-
-        courses.append({'code': code, 'name': name, 'geneds': geneds, 'description': description})
+        courses.append({'code': code, 'name': name, 'geneds': geneds})
 
     return courses
 

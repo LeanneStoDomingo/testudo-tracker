@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from ...models import Course, Day, Department, GenEd, Professor, Section, Semester
+from ...models import *
 from . import _scraper as scraper
 from datetime import date
 
@@ -28,7 +28,6 @@ class Command(BaseCommand):
                 course_obj, _ = Course.objects.update_or_create(
                     code=course['code'],
                     name=course['name'],
-                    description=course['description'],
                     department=department_obj
                 )
 
