@@ -2,7 +2,7 @@
 testudo-tracker/
 
 # Environment variables
-backend/backend/.env
+*/.env
 
 # VSCode settings
 .vscode/
@@ -10,6 +10,9 @@ backend/backend/.env
 # NodeJS
 frontend/node_modules
 frontend/.eslintcache
+
+# For testing api endpoints
+*.http
 
 
 # Below - .gitignore from create-react-app
