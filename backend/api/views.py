@@ -1,5 +1,6 @@
 from django.db.models.aggregates import Max, Sum
 from django.http.response import JsonResponse
+from django.utils.text import slugify
 from .models import *
 
 # Create your views here.
@@ -48,8 +49,8 @@ def _list_seats(days, sections):
     return res, num_sections
 
 
-def get_department(request, dept_code):
-    department = Department.objects.get(code__iexact=dept_code)
+def get_department(request, dept_id):
+    department = Department.objects.get(id=dept_id)
     course_objs = Course.objects.filter(department=department)
     section_objs = Section.objects.filter(course__in=course_objs)
     days = Day.objects.filter(section__in=section_objs)
@@ -57,8 +58,8 @@ def get_department(request, dept_code):
     seats, num_sections = _list_seats(days, section_objs)
 
     res = {
-        'id': department.id,
-        'code': dept_code.upper(),
+        'id': dept_id,
+        'code': department.code,
         'name': department.name,
         'seats': seats,
         'num_sections': num_sections,
@@ -68,12 +69,12 @@ def get_department(request, dept_code):
     return JsonResponse(res, json_dumps_params={'indent': 2})
 
 
-def get_course(request, course_code):
+def get_course(request, course_id):
     sections_query = request.GET.getlist('sections')
     professors_query = request.GET.getlist('professors')
     semesters_query = request.GET.getlist('semesters')
 
-    course = Course.objects.get(code__iexact=course_code)
+    course = Course.objects.get(id=course_id)
     sections = Section.objects.filter(course=course)
     professors = Professor.objects.filter(section__in=sections).distinct()
     semesters = Semester.objects.filter(section__in=sections).distinct()
@@ -99,8 +100,8 @@ def get_course(request, course_code):
     seats, num_sections = _list_seats(days, sections)
 
     res = {
-        'id': course.id,
-        'code': course_code.upper(),
+        'id': course_id,
+        'code': course.code,
         'name': course.name,
         'seats': seats,
         'num_sections': num_sections,
@@ -110,8 +111,8 @@ def get_course(request, course_code):
     return JsonResponse(res, json_dumps_params={'indent': 2})
 
 
-def get_professor(request, prof_slug):
-    professor = Professor.objects.get(slug__iexact=prof_slug)
+def get_professor(request, prof_id):
+    professor = Professor.objects.get(id=prof_id)
     section_objs = Section.objects.filter(professors=professor)
     course_objs = Course.objects.filter(section__in=section_objs)
     days = Day.objects.filter(section__in=section_objs)
@@ -119,7 +120,7 @@ def get_professor(request, prof_slug):
     seats, num_sections = _list_seats(days, section_objs)
 
     res = {
-        'id': professor.id,
+        'id': prof_id,
         'name': professor.name,
         'seats': seats,
         'num_sections': num_sections,
@@ -129,8 +130,8 @@ def get_professor(request, prof_slug):
     return JsonResponse(res, json_dumps_params={'indent': 2})
 
 
-def get_gened(request, gened_code):
-    gened = GenEd.objects.get(code__iexact=gened_code)
+def get_gened(request, gened_id):
+    gened = GenEd.objects.get(id=gened_id)
     course_objs = Course.objects.filter(geneds=gened)
     section_objs = Section.objects.filter(course__in=course_objs)
     days = Day.objects.filter(section__in=section_objs)
@@ -138,8 +139,8 @@ def get_gened(request, gened_code):
     seats, num_sections = _list_seats(days, section_objs)
 
     res = {
-        'id': gened.id,
-        'code': gened_code.upper(),
+        'id': gened_id,
+        'code': gened.code,
         'name': gened.name,
         'seats': seats,
         'num_sections': num_sections,
@@ -167,7 +168,7 @@ def search(request):
 
     professor_objs = Professor.objects.all()
     professors = list(professor_objs.values())
-    professors = [{**professor, 'link': f'professors/{professor["slug"]}/',
+    professors = [{**professor, 'link': f'professors/{slugify(professor["name"])}/',
                    'text': f'{professor["name"]}'} for professor in professors]
 
     res = {

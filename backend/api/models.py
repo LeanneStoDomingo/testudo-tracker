@@ -55,14 +55,9 @@ class Course(models.Model):
 
 class Professor(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    slug = models.SlugField(max_length=100, unique=True)
 
     class Meta:
         ordering = ['name']
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
-        super(Professor, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
