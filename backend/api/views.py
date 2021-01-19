@@ -153,22 +153,22 @@ def get_gened(request, gened_id):
 def search(request):
     department_objs = Department.objects.all()
     departments = list(department_objs.values())
-    departments = [{**department, 'link': f'departments/{department["code"]}/',
+    departments = [{**department, 'link': f'/departments/{department["code"]}',
                     'text': f'{department["code"]} {department["name"]}'} for department in departments]
 
     gened_objs = GenEd.objects.all()
     geneds = list(gened_objs.values())
-    geneds = [{**gened, 'link': f'geneds/{gened["code"]}/',
+    geneds = [{**gened, 'link': f'/geneds/{gened["code"]}',
                'text': f'{gened["code"]} {gened["name"]}'} for gened in geneds]
 
     course_objs = Course.objects.all()
     courses = list(course_objs.values('id', 'code', 'name'))
-    courses = [{**course, 'link': f'courses/{course["code"]}/',
+    courses = [{**course, 'link': f'/courses/{course["code"]}',
                 'text': f'{course["code"]} {course["name"]}'} for course in courses]
 
     professor_objs = Professor.objects.all()
     professors = list(professor_objs.values())
-    professors = [{**professor, 'link': f'professors/{slugify(professor["name"])}/',
+    professors = [{**professor, 'link': f'/professors/{slugify(professor["name"])}',
                    'text': f'{professor["name"]}'} for professor in professors]
 
     res = {
