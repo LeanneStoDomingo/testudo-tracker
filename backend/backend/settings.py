@@ -14,7 +14,7 @@ from pathlib import Path
 
 # Set up environment variables for development
 import environ
-env = environ.Env()
+env = environ.Env(DEBUG=(bool, False))
 environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['localhost', '192.168.29.114']
 
@@ -84,11 +84,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'testudo_tracker',
-        'USER': 'postgres',
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
         'PASSWORD': env('DB_PASSWORD'),
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
     }
 }
 
@@ -134,9 +134,10 @@ STATIC_URL = '/static/'
 # CORS Settings
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000"
+    'http://localhost:3000',
+    'https://testudotracker.netlify.app',
+    'https://www.testudotracker.com',
+    'https://testudotracker.com'
 ]
 
-CORS_ALLOW_METHODS = [
-    'GET'
-]
+CORS_ALLOW_METHODS = ['GET']
