@@ -7,7 +7,7 @@ export const SearchProvider = ({ children }) => {
     const { data } = useAxios('/search')
 
     return (
-        <SearchContext.Provider value={data}>
+        <SearchContext.Provider value={data.data}>
             {children}
         </SearchContext.Provider>
     )

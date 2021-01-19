@@ -5,7 +5,7 @@ const Footer = () => {
     return (
         <footer>
             <div>
-                Footer Logo Testudo Tracker Reddit Github
+                Footer Logo Testudo Tracker Reddit GitHub
             </div>
         </footer>
     )

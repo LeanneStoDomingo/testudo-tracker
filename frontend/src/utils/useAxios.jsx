@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 
-const axiosInstance = axios.create(process.env.REACT_APP_API_URL)
+const axiosInstance = axios.create({ baseURL: process.env.REACT_APP_API_URL })
 
 const useAxios = (endpoint, initial = {}) => {
     const [data, setData] = useState(initial)
@@ -9,13 +9,13 @@ const useAxios = (endpoint, initial = {}) => {
 
     useEffect(() => {
         setLoading(true)
-        axiosInstance.get(endpoint)
+        axiosInstance.get(`api${endpoint}/`)
             .then(res => {
-                setData(res)
+                setData(res.data)
                 setLoading(false)
             })
             .catch(err => console.error(err))
-    }, [])
+    }, [endpoint])
 
     return { data, loading }
 }
