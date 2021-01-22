@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Container } from 'react-bootstrap'
 import CardGrid from '../components/CardGrid'
-import SearchBar from '../components/SearchBar'
+import BigSearchBar from '../components/BigSearchBar'
 import SearchContext from '../utils/SearchContext'
 
 const Search = () => {
@@ -14,10 +14,17 @@ const Search = () => {
     }, [search])
 
     return (
-        <Container className='text-center'>
+        <Container className='text-center top-container'>
             <h1>Search</h1>
-            <SearchBar />
-            <CardGrid cards={data} />
+            <BigSearchBar placeholder='Search...' />
+            {search !== {} ? (
+                <>
+                    <CardGrid cards={data} />
+                    <div>stuff has loaded</div>
+                    <div>{JSON.stringify(data)}</div>
+                </>
+            ) : <div>hasnt loaded yet</div>}
+
         </Container>
     )
 }

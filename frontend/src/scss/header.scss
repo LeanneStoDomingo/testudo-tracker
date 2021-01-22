@@ -1,0 +1,46 @@
+@import "theme";
+@import "~bootstrap/scss/bootstrap";
+
+.navbar {
+    background-color: $red;
+    min-height: 60px;
+
+    .navbar-brand {
+        color: white !important;
+    }
+
+    .nav-link {
+        color: white !important;
+
+        &:hover {
+            color: lighten($red, 40) !important;
+        }
+    }
+
+    .dropdown-menu {
+        background-color: $dark-red;
+
+        @include media-breakpoint-down(sm) {
+            .dropdown-item {
+                text-align: center;
+            }
+        }
+
+        .dropdown-item {
+            color: white !important;
+
+            &.active {
+                background-color: inherit;
+            }
+
+            &:hover {
+                color: lighten($red, 40) !important;
+                background-color: $dark-red;
+            }
+        }
+    }
+
+    .navbar-toggler {
+        border-color: lightgray !important;
+    }
+}

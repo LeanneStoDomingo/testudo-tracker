@@ -5,7 +5,7 @@ import { SearchProvider } from './utils/SearchContext'
 import Search from "./pages/Search";
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import NotFound from "./pages/NotFound";
-import CourseDetail from "./pages/CourseDetail";
+import CoursePage from "./pages/CoursePage";
 
 
 const App = () => {
@@ -16,7 +16,7 @@ const App = () => {
         <Switch>
           <Route exact path='/' component={Home} />
           <Route exact path='/search' component={Search} />
-          <Route exact path='/courses/:code' component={CourseDetail} />
+          <Route exact path='/courses/:code' component={CoursePage} />
           <Route component={NotFound} />
         </Switch>
         <Footer />
