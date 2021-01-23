@@ -25,19 +25,23 @@ def _list_seats(days, sections):
     # TODO: filter out current semster scrapings
 
     nums = days.aggregate(Max('day'))
-    for i in range(nums['day__max'] + 1):
-        day = days.filter(day=i).aggregate(
-            Sum('total_seats'),
-            Sum('open_seats'),
-            Sum('waitlist_seats'),
-            Sum('holdfile_seats')
-        )
 
-        total_seats.append(day['total_seats__sum'] or 0)
-        open_seats.append(day['open_seats__sum'] or 0)
-        waitlist_seats.append(day['waitlist_seats__sum'] or 0)
-        holdfile_seats.append(day['holdfile_seats__sum'] or 0)
-        num_sections.append(sections.filter(day__in=days.filter(day=i)).count())
+    try:
+        for i in range(nums['day__max'] + 1):
+            day = days.filter(day=i).aggregate(
+                Sum('total_seats'),
+                Sum('open_seats'),
+                Sum('waitlist_seats'),
+                Sum('holdfile_seats')
+            )
+
+            total_seats.append(day['total_seats__sum'] or 0)
+            open_seats.append(day['open_seats__sum'] or 0)
+            waitlist_seats.append(day['waitlist_seats__sum'] or 0)
+            holdfile_seats.append(day['holdfile_seats__sum'] or 0)
+            num_sections.append(sections.filter(day__in=days.filter(day=i)).count())
+    except:
+        print('There are no sections that match the filter parameters')
 
     res = {
         'total_seats': total_seats,
@@ -70,9 +74,9 @@ def get_department(request, dept_id):
 
 
 def get_course(request, course_id):
-    sections_query = request.GET.getlist('sections')
-    professors_query = request.GET.getlist('professors')
-    semesters_query = request.GET.getlist('semesters')
+    sections_query = request.GET.getlist('sections[]')
+    professors_query = request.GET.getlist('professors[]')
+    semesters_query = request.GET.getlist('semesters[]')
 
     course = Course.objects.get(id=course_id)
     sections = Section.objects.filter(course=course)
@@ -86,7 +90,7 @@ def get_course(request, course_id):
     }
 
     if sections_query:
-        sections = sections.filter(id__in=sections_query)
+        sections = sections.filter(code__in=sections_query)
 
     if professors_query:
         professors = professors.filter(id__in=professors_query)

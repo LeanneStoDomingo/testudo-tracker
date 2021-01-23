@@ -1,17 +1,11 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Line } from 'react-chartjs-2'
 
 const LineChart = ({ data }) => {
 
-    useEffect(() => {
-        console.log('data in chart', data)
-    }, [data])
-
     return (
         <div style={{ position: 'relative', height: '60vh' }}>
             <Line
-                // height={250}
-                // height={500}
                 data={{
                     labels: [...Array(data.num_sections.length).keys()],
                     datasets: [
