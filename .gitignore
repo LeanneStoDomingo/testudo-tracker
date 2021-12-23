@@ -9,7 +9,7 @@ testudo-tracker/
 
 # NodeJS
 frontend/node_modules
-frontend/.eslintcache
+frontend/.next
 
 # For testing api endpoints
 *.http
