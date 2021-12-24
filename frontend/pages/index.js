@@ -17,9 +17,16 @@ const Home = () => {
             </div>
             <div className='bg-white text-black'>
                 <h2 className='text-3xl text-center'>Popular Courses</h2>
-                <div></div>
+                <div className='grid grid-cols-1 xl:grid-cols-3 gap-2'>
+                    <div className='w-96 h-80 bg-gray-300'>chart</div>
+                    <div className='w-96 h-80 bg-gray-300'>chart</div>
+                    <div className='w-96 h-80 bg-gray-300'>chart</div>
+                </div>
             </div>
-            <div></div>
+            <div className='grid grid-cols-1 xl:grid-cols-2 gap-2'>
+                <div className='w-96 h-80 bg-gray-300 text-black'>chart</div>
+                <div className='w-96 h-80 bg-gray-300 text-black'>chart</div>
+            </div>
         </>
     )
 }
