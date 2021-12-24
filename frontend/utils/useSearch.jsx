@@ -6,7 +6,7 @@ const useSearch = () => {
     const { data, error } = useSWR('https://server.testudotracker.com/api/search/', fetcher)
 
     return {
-        search: data.data,
+        search: data?.data,
         loading: !error && !data,
         error
     }
