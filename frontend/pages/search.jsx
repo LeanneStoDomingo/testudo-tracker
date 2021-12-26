@@ -38,7 +38,7 @@ const Search = () => {
     }
 
     return (
-        <div className="bg-white text-black">
+        <div className="bg-white text-black px-2">
             <h1>Search</h1>
             <form className='flex justify-center gap-3 my-5 text-xl pb-10' onSubmit={onSubmit}>
                 <div className='flex-col w-3/4 relative max-w-2xl'>
@@ -59,7 +59,7 @@ const Search = () => {
                 next={getMoreResults}
                 hasMore={hasMore}
                 loader={<div>Loading...</div>}
-                className="grid grid-cols-4 gap-5 text-center mx-3"
+                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 text-center"
             >
                 {!error && !loading &&
                     showResults?.map((item, index) => (
