@@ -32,8 +32,8 @@ const Home = () => {
                 <p className='text-xl'>A student run website that tracks seat availability for courses at the University of Maryland, College Park</p>
                 <form className='flex justify-center gap-3 my-5 text-xl' onSubmit={onSubmit}>
                     <div className='flex-col w-3/4 relative max-w-2xl'>
-                        <input onChange={(e) => setQuery(e.target.value)} value={query} className='w-full rounded p-3 text-black focus:outline-none focus:ring-4 focus:ring-primary-900/50' placeholder='Search for Courses, Professors, Departments, GenEds, etc...' />
-                        <div className='absolute bg-white text-black shadow-lg rounded mt-1 w-full wrap text-base md:text-xl text-left'>
+                        <input onChange={(e) => setQuery(e.target.value)} value={query} className='peer w-full rounded p-3 text-black focus:outline-none focus:ring-4 focus:ring-primary-900/50' placeholder='Search for Courses, Professors, Departments, GenEds, etc...' />
+                        <div className='hidden peer-focus:block hover:block absolute bg-white text-black shadow-lg rounded mt-1 w-full wrap text-base md:text-xl text-left'>
                             <ul>
                                 {query.length != 0 && !error && !loading &&
                                     search
