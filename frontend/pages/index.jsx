@@ -39,7 +39,7 @@ const Home = () => {
                                     search
                                         .filter((item) => item.text.toLowerCase().includes(query.toLowerCase()))
                                         .slice(0, 10)
-                                        .map((item) => <li key={item.link} className='rounded p-2 hover:bg-primary-50 cursor-pointer'><Link href={item.link}>{item.text}</Link></li>)}
+                                        .map((item, index) => <li key={index} className='rounded p-2 hover:bg-primary-50 cursor-pointer'><Link href={item.link}>{item.text}</Link></li>)}
                             </ul>
                         </div>
                     </div>
