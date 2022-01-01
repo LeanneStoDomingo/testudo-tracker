@@ -1,16 +1,17 @@
 import Card from "@components/Card"
+import fetcher from "@utils/fecther"
 import useSearch from "@utils/useSearch"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useMemo, useState } from "react"
 import InfiniteScroll from "react-infinite-scroll-component"
 
-const Search = () => {
+const Search = ({ searchData }) => {
     const router = useRouter()
     const [query, setQuery] = useState('')
     const [showResults, setShowResults] = useState([])
     const [hasMore, setHasMore] = useState(true)
-    const { search, loading, error } = useSearch()
+    const { search, loading, error } = useSearch(searchData)
 
     const filtered = useMemo(
         () => search?.filter((item) => item.text.toLowerCase().includes(query?.toLowerCase())),
@@ -73,3 +74,8 @@ const Search = () => {
 }
 
 export default Search
+
+export const getStaticProps = async () => {
+    const searchData = await fetcher('https://server.testudotracker.com/api/search/')
+    return { props: { searchData } }
+}

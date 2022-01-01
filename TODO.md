@@ -14,3 +14,4 @@
 
 - [ ] dont change results when typing in search bar, only when query param changes
 - [ ] defocus (blur) search bar when pressing enter/esc
+- [ ] have back to top button at end of results

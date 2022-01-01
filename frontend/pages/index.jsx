@@ -1,12 +1,13 @@
+import fetcher from '@utils/fecther'
 import useSearch from '@utils/useSearch'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 
-const Home = () => {
+const Home = ({ searchData }) => {
     const [query, setQuery] = useState('')
-    const { search, loading, error } = useSearch()
+    const { search, loading, error } = useSearch(searchData)
     const router = useRouter()
 
     const onSubmit = (e) => {
@@ -63,3 +64,8 @@ const Home = () => {
 }
 
 export default Home
+
+export const getStaticProps = async () => {
+    const searchData = await fetcher('https://server.testudotracker.com/api/search/')
+    return { props: { searchData } }
+}
