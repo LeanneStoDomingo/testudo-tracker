@@ -1,3 +1,4 @@
+import BackToTop from "@components/BackToTop"
 import Card from "@components/Card"
 import fetcher from "@utils/fecther"
 import useKeydown from "@utils/useKeydown"
@@ -72,8 +73,8 @@ const Search = ({ searchData }) => {
                     dataLength={showResults?.length || 0}
                     next={getMoreResults}
                     hasMore={hasMore}
-                    loader={<div>Loading...</div>}
-                    endMessage={<div>End of Results</div>}
+                    loader={<div className="sm:col-span-2 md:col-span-3 lg:col-span-4">Loading...</div>}
+                    endMessage={<BackToTop />}
                     className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 text-center"
                 >
                     {!error && !loading && showResults?.map((item, index) => <Card key={index} item={item} />)}
