@@ -1,10 +1,11 @@
 import Card from "@components/Card"
 import fetcher from "@utils/fecther"
+import useKeydown from "@utils/useKeydown"
 import useSearch from "@utils/useSearch"
 import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import InfiniteScroll from "react-infinite-scroll-component"
 
 const Search = ({ searchData }) => {
@@ -13,6 +14,7 @@ const Search = ({ searchData }) => {
     const [showResults, setShowResults] = useState([])
     const [hasMore, setHasMore] = useState(true)
     const { search, loading, error } = useSearch(searchData)
+    const inputRef = useRef(null)
 
     const filtered = useMemo(
         () => search?.filter((item) => item.text.toLowerCase().includes(query?.toLowerCase())),
@@ -24,9 +26,10 @@ const Search = ({ searchData }) => {
     }, [router.query.query])
 
     useEffect(() => {
-        setShowResults(search?.filter((item) => item.text.toLowerCase().includes(query?.toLowerCase())).slice(0, 50))
-    }, [search, query])
+        setShowResults(search?.filter((item) => item.text.toLowerCase().includes(router?.query?.query?.toLowerCase())).slice(0, 50))
+    }, [search, router.query.query])
 
+    useKeydown('Escape', () => inputRef.current.blur())
 
     const getMoreResults = () => setShowResults(results => {
         if (results.length + 50 >= filtered.length) setHasMore(false)
@@ -39,6 +42,7 @@ const Search = ({ searchData }) => {
         if (filtered.length === 1) {
             router.push(filtered[0].link)
         } else {
+            inputRef.current.blur()
             router.push(`/search?query=${query}`)
         }
     }
@@ -52,7 +56,7 @@ const Search = ({ searchData }) => {
                 <h1>Search</h1>
                 <form className='flex justify-center gap-3 my-5 text-xl pb-10' onSubmit={onSubmit}>
                     <div className='flex-col w-3/4 relative max-w-2xl'>
-                        <input onChange={(e) => setQuery(e.target.value)} value={query} className='outline outline-1 outline-zinc-100 peer shadow-2xl w-full rounded p-3 text-black focus:outline-none focus:ring-4 focus:ring-primary-900/50' placeholder='Search for Courses, Professors, Departments, GenEds, etc...' />
+                        <input ref={inputRef} onChange={(e) => setQuery(e.target.value)} value={query} className='outline outline-1 outline-zinc-100 peer shadow-2xl w-full rounded p-3 text-black focus:outline-none focus:ring-4 focus:ring-primary-900/50' placeholder='Search for Courses, Professors, Departments, GenEds, etc...' />
                         <div className='hidden peer-focus:block hover:block absolute bg-white text-black shadow-lg rounded mt-1 w-full wrap text-base md:text-xl text-left'>
                             <ul>
                                 {query?.length != 0 && !error && !loading &&

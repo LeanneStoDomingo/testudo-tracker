@@ -12,6 +12,6 @@
 
 ## Search Page
 
-- [ ] dont change results when typing in search bar, only when query param changes
-- [ ] defocus (blur) search bar when pressing enter/esc
+- [x] dont change results when typing in search bar, only when query param changes
+- [x] defocus (blur) search bar when pressing enter/esc
 - [ ] have back to top button at end of results
