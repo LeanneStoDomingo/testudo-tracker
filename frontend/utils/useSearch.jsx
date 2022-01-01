@@ -1,9 +1,7 @@
 import useSWR from "swr"
-import fetcher from "./fecther"
-
 
 const useSearch = () => {
-    const { data, error } = useSWR('https://server.testudotracker.com/api/search/', fetcher)
+    const { data, error } = useSWR('https://server.testudotracker.com/api/search/')
 
     return {
         search: data?.data,
