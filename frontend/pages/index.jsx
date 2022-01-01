@@ -1,6 +1,5 @@
 import fetcher from '@utils/fecther'
 import useSearch from '@utils/useSearch'
-import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -24,10 +23,6 @@ const Home = ({ searchData }) => {
 
     return (
         <>
-            <Head>
-                <title>Testudo Tracker</title>
-                <meta name='description' content='A student run website that tracks seat availability for courses at the University of Maryland, College Park' />
-            </Head>
             <div className='flex flex-col text-center mx-2'>
                 <h1 className='text-5xl sm:text-6xl font-semibold'>Testudo Tracker</h1>
                 <p className='text-xl'>A student run website that tracks seat availability for courses at the University of Maryland, College Park</p>
