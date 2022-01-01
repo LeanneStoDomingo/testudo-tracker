@@ -1,7 +1,8 @@
+import Card from "@components/Card"
 import useSearch from "@utils/useSearch"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import InfiniteScroll from "react-infinite-scroll-component"
 
 const Search = () => {
@@ -11,7 +12,10 @@ const Search = () => {
     const [hasMore, setHasMore] = useState(true)
     const { search, loading, error } = useSearch()
 
-    const filtered = search?.filter((item) => item.text.toLowerCase().includes(query?.toLowerCase()))
+    const filtered = useMemo(
+        () => search?.filter((item) => item.text.toLowerCase().includes(query?.toLowerCase())),
+        [search, query]
+    )
 
     useEffect(() => {
         setQuery(router.query.query || '')
@@ -59,22 +63,10 @@ const Search = () => {
                 next={getMoreResults}
                 hasMore={hasMore}
                 loader={<div>Loading...</div>}
+                endMessage={<div>End of Results</div>}
                 className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 text-center"
             >
-                {!error && !loading &&
-                    showResults?.map((item, index) => (
-                        <Link key={index} href={item.link}>
-                            <a className="shadow hover:shadow-lg cursor-pointer rounded">
-                                {item.code ?
-                                    <div className="bg-zinc-100 h-full">
-                                        <div className="bg-zinc-300 text-lg rounded-t p-2">{item.code}</div>
-                                        <div className="m-2">{item.name}</div>
-                                    </div>
-                                    : <div className="bg-zinc-300 p-2 h-full">{item.name}</div>}
-                            </a>
-                        </Link>
-                    ))
-                }
+                {!error && !loading && showResults?.map((item, index) => <Card key={index} item={item} />)}
             </InfiniteScroll>
         </div>
     )
