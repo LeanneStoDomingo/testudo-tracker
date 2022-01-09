@@ -1,7 +1,12 @@
+import useSearchBar from "@utils/useSearchBar"
+
 const SearchBar = () => {
+    const { value, onChange, onSubmit, error } = useSearchBar()
+
     return (
-        <form>
-            <input />
+        <form onSubmit={onSubmit}>
+            {error && <>error</>}
+            <input value={value} onChange={onChange} type='text' />
         </form>
     )
 }
