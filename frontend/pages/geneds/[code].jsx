@@ -1,9 +1,7 @@
+import CategorySection from "@components/CategorySection"
+
 const Gened = () => {
-    return (
-        <div>
-            gened
-        </div>
-    )
+    return <CategorySection title='title' />
 }
 
 export default Gened

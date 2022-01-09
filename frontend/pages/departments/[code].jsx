@@ -1,9 +1,7 @@
+import CategorySection from "@components/CategorySection"
+
 const Department = () => {
-    return (
-        <div>
-            department
-        </div>
-    )
+    return <CategorySection title='title' />
 }
 
 export default Department

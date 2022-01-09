@@ -15,7 +15,9 @@ const App = ({ Component, pageProps }) => {
             </Head>
             <SWRConfig value={{ fetcher }}>
                 <Header />
-                <Component {...pageProps} />
+                <main>
+                    <Component {...pageProps} />
+                </main>
                 <Footer />
             </SWRConfig>
         </>

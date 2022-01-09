@@ -1,8 +1,10 @@
 const Course = () => {
     return (
-        <div>
-            course
-        </div>
+        <>
+            <h1>code</h1>
+            <p>name</p>
+            <div>chart</div>
+        </>
     )
 }
 

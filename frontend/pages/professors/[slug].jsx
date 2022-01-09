@@ -1,9 +1,7 @@
+import CategorySection from "@components/CategorySection"
+
 const Professor = () => {
-    return (
-        <div>
-            professor
-        </div>
-    )
+    return <CategorySection title='title' />
 }
 
 export default Professor

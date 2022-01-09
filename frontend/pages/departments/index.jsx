@@ -1,9 +1,7 @@
+import SearchSection from "@components/SearchSection"
+
 const Departments = () => {
-    return (
-        <div>
-            departments
-        </div>
-    )
+    return <SearchSection title='Departments' />
 }
 
 export default Departments
