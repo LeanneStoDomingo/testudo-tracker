@@ -1,8 +1,13 @@
-const Card = () => {
+import Link from "next/link"
+
+const Card = ({ code, name, link }) => {
     return (
-        <div>
-            card
-        </div>
+        <Link href={link}>
+            <a>
+                <span>{code}</span>
+                <span>{name}</span>
+            </a>
+        </Link>
     )
 }
 

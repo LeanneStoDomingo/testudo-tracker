@@ -2,12 +2,12 @@ import useSearch from "@utils/useSearch"
 import { useRouter } from "next/router"
 import { useState } from "react"
 
-const useSearchBar = () => {
+const useSearchBar = (filter = '') => {
     const router = useRouter()
     const { search, error } = useSearch()
     const [value, setValue] = useState('')
 
-    const filtered = search.filter((item) => item.text.toLowerCase().includes(value.toLowerCase()))
+    const filtered = search.filter((item) => item.link.includes(filter) && item.text.toLowerCase().includes(value.toLowerCase()))
 
     const autocomplete = !!value ? filtered.slice(0, 10) : []
 

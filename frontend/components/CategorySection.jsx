@@ -1,6 +1,6 @@
 import SearchSection from "@components/SearchSection"
 
-const CategorySection = ({ title }) => {
+const CategorySection = ({ title, results }) => {
     return (
         <>
             <section>
@@ -8,7 +8,7 @@ const CategorySection = ({ title }) => {
                 <div>chart</div>
             </section>
             <section>
-                <SearchSection h2={true} />
+                <SearchSection titleTag='h2' results={results} />
             </section>
         </>
     )

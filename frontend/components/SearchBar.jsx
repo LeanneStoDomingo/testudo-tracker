@@ -1,8 +1,8 @@
 import useSearchBar from "@utils/useSearchBar"
 import Link from "next/link"
 
-const SearchBar = () => {
-    const { value, autocomplete, onChange, onSubmit, error } = useSearchBar()
+const SearchBar = ({ filter = '' }) => {
+    const { value, autocomplete, onChange, onSubmit, error } = useSearchBar(filter)
 
     return (
         <form onSubmit={onSubmit}>
