@@ -2,6 +2,7 @@ import '@styles/globals.css'
 import Head from 'next/head'
 import { SWRConfig } from 'swr'
 import fetcher from '@utils/fecther'
+import Header from '@components/Header'
 
 const App = ({ Component, pageProps }) => {
     return (
@@ -12,6 +13,8 @@ const App = ({ Component, pageProps }) => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <SWRConfig value={{ fetcher }}>
+                <Header />
+                <div className='py-7'></div>
                 <Component {...pageProps} />
             </SWRConfig>
         </>
