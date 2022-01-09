@@ -1,7 +1,5 @@
-import SearchSection from "@components/SearchSection"
-
 const Departments = () => {
-    return <SearchSection title='Departments' filter='/departments/' />
+    return <></>
 }
 
 export default Departments

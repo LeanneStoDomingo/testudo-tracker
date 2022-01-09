@@ -2,7 +2,7 @@ import useSearch from "@utils/useSearch"
 import { useRouter } from "next/router"
 import { useState } from "react"
 
-const useSearchBar = (filter = '') => {
+const useSearchBar = (filter = '', results = null) => {
     const router = useRouter()
     const { search, error } = useSearch()
     const [value, setValue] = useState('')

@@ -4,13 +4,13 @@ import useSearchSection from "@utils/useSearchSection"
 import { createElement } from "react"
 
 // const SearchSection = ({ title = '', filter = '', query = '', results = [], showAll = true, titleTag = 'h1' }) => {
-const SearchSection = ({ title = '', filter = '', query = '', showAll = true, titleTag = 'h1' }) => {
-    const results = useSearchSection(filter, query, showAll)
+// const SearchSection = ({ title = '', filter = '', query = '', showAll = true, titleTag = 'h1' }) => {
+const SearchSection = ({ title = '', query = '', showAll = true, titleTag = 'h1' }) => {
 
     return (
         <>
             {createElement(titleTag, null, `Search ${title}`)}
-            <SearchBar filter={filter} />
+            <SearchBar />
             <div>
                 {results.map((result, i) => <Card key={i} {...result} />)}
             </div>
