@@ -1,7 +1,7 @@
 import useSWR from "swr"
 
 const useDepartment = (code) => {
-    const { data, error } = useSWR(`https://server.testudotracker.com/api/departments/${code}`)
+    const { data, error } = useSWR(`/departments/${code}`)
 
     return {
         ...data,

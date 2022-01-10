@@ -1,7 +1,7 @@
 import useSWR from "swr"
 
 const useSearch = (fallbackData = { data: [] }) => {
-    const { data, error } = useSWR('https://server.testudotracker.com/api/search/', { fallbackData })
+    const { data, error } = useSWR('/search', { fallbackData })
 
     return {
         search: data.data,
