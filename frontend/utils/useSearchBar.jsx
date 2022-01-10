@@ -7,7 +7,7 @@ const useSearchBar = (search) => {
 
     const filtered = search.filter(item => item.text.toLowerCase().includes(value.toLowerCase()))
 
-    const autocomplete = !!value ? filtered : []
+    const autocomplete = !!value ? filtered.slice(0, 10) : []
 
     const onChange = (e) => setValue(e.target.value)
 
