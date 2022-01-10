@@ -1,9 +1,9 @@
-import SearchResults from "@components/search/SearchResults"
+import CourseResults from "@components/search/CourseResults"
 import useDepartment from "@utils/api/useDepartment"
-import { useRouter } from "next/router"
+// import { useRouter } from "next/router"
 
 const Department = () => {
-    const router = useRouter()
+    // const router = useRouter()
     // const { courses } = useDepartment(router.query.code)
     const { courses } = useDepartment(1)
 
@@ -14,17 +14,7 @@ const Department = () => {
         text: `${code} ${name}`
     }))
 
-    return (
-        <>
-            <section>
-                <h1>code</h1>
-                <div>chart</div>
-            </section>
-            <section>
-                <SearchResults titleTag='h2' search={results} />
-            </section>
-        </>
-    )
+    return <CourseResults title='code' results={results} />
 }
 
 export default Department
