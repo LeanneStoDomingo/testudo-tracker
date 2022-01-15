@@ -30,8 +30,15 @@ const SearchBar = ({ search }) => {
         }
     })
 
+    useKeydown('Escape', () => inputRef.current.blur())
+
+    const handleSubmit = (e) => {
+        inputRef.current.blur()
+        onSubmit(e)
+    }
+
     return (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleSubmit}>
             <input value={value} onChange={onChange} ref={inputRef} type="text" />
             <ul>
                 {autocomplete.map((item, i) => <li key={i}><Link href={item.link}><a ref={e => refs.current[i] = e}>{item.text}</a></Link></li>)}
