@@ -1,13 +1,15 @@
-import useSWR from "swr"
+// import useSWR from "swr"
 
-const useGened = (code) => {
-    const { data, error } = useSWR(`/geneds/${code}`)
+import useSWR from "@utils/useSWR"
 
-    return {
-        ...data,
-        loading: !error && !data,
-        error
-    }
-}
+const useGened = (code, fallbackData) => useSWR(`/geneds/${code}`, fallbackData)
+//     const { data, error } = useSWR(`/geneds/${code}`, { fallbackData })
+
+//     return {
+//         ...data,
+//         loading: !error && !data,
+//         error
+//     }
+// }
 
 export default useGened

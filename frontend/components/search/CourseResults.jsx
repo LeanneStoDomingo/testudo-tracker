@@ -1,11 +1,12 @@
+import Chart from "@components/Chart"
 import SearchResults from "@components/search/SearchResults"
 
-const CourseResults = ({ title, results }) => {
+const CourseResults = ({ title, results, chartData }) => {
     return (
         <>
             <section>
                 <h1>{title}</h1>
-                <div>chart</div>
+                <Chart data={chartData} />
             </section>
             <section>
                 <SearchResults titleTag='h2' search={results} />

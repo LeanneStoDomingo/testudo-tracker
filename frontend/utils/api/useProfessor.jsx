@@ -1,13 +1,15 @@
-import useSWR from "swr"
+// import useSWR from "swr"
 
-const useProfessor = (slug) => {
-    const { data, error } = useSWR(`/professors/${slug}`)
+import useSWR from "@utils/useSWR"
 
-    return {
-        ...data,
-        loading: !error && !data,
-        error
-    }
-}
+const useProfessor = (slug, fallbackData) => useSWR(`/professors/${slug}`, fallbackData)
+//     const { data, error } = useSWR(`/professors/${slug}`, { fallbackData })
+
+//     return {
+//         ...data,
+//         loading: !error && !data,
+//         error
+//     }
+// }
 
 export default useProfessor
