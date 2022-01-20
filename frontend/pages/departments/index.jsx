@@ -1,13 +1,13 @@
 import SearchResults from "@components/search/SearchResults"
-// import useDepartments from "@utils/api/useDepartments"
-import useSearch from "@utils/api/useSearch"
+import useSearch from "@utils/useSearch"
 import axios from "@utils/axios"
 import filterByCategory from "@utils/filterByCategory"
+// import useSWR from "@utils/useSWR"
 
 const filterDepartments = (data) => filterByCategory('departments', data)
 
 const Departments = ({ fallbackData }) => {
-    // const { departments } = useDepartments(fallbackData)
+    // const { departments } = useSWR('/departments', fallbackData)
     const { search } = useSearch({ data: fallbackData })
 
     const searchData = filterDepartments(search)

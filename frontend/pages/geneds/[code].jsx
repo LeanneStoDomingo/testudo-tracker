@@ -1,15 +1,14 @@
 import CourseResults from "@components/search/CourseResults"
-import useGened from "@utils/api/useGened"
 import axios from "@utils/axios"
 import filterByCategory from "@utils/filterByCategory"
-import formatChartData from "@utils/formatChartData"
+import useSWR from "@utils/useSWR"
 import { useRouter } from "next/router"
 
 const Gened = ({ fallbackData }) => {
     const router = useRouter()
     const { code } = router.query
 
-    const { name, seats, courses } = useGened(code, fallbackData)
+    const { name, seats, courses } = useSWR(`/geneds/${code}`, fallbackData)
 
     // temp solution until api endpoint includes link and text
     const results = courses.map(({ code, name }) => ({
@@ -19,7 +18,7 @@ const Gened = ({ fallbackData }) => {
         text: `${code} ${name}`
     }))
 
-    return <CourseResults title={`${code}: ${name}`} results={results} chartData={formatChartData(seats)} />
+    return <CourseResults title={`${code}: ${name}`} results={results} seats={seats} />
 }
 
 export default Gened

@@ -1,13 +1,13 @@
 import SearchResults from "@components/search/SearchResults"
-// import useGeneds from "@utils/api/useGeneds"
-import useSearch from "@utils/api/useSearch"
+import useSearch from "@utils/useSearch"
 import axios from "@utils/axios"
 import filterByCategory from "@utils/filterByCategory"
+// import useSWR from "@utils/useSWR"
 
 const filterGeneds = (data) => filterByCategory('geneds', data)
 
 const Geneds = ({ fallbackData }) => {
-    // const { geneds } = useGeneds(fallbackData)
+    // const { geneds } = useSWR('/geneds')
     const { search } = useSearch({ data: fallbackData })
 
     const searchData = filterGeneds(search)

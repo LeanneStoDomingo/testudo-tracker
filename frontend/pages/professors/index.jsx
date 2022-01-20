@@ -1,19 +1,19 @@
 import SearchResults from "@components/search/SearchResults"
-// import useProfessors from "@utils/api/useProfessors"
-import useSearch from "@utils/api/useSearch"
+import useSearch from "@utils/useSearch"
 import axios from "@utils/axios"
 import filterByCategory from "@utils/filterByCategory"
+// import useSWR from "@utils/useSWR"
 
 const filterProfessors = (data) => filterByCategory('professors', data)
 
 const Professors = ({ fallbackData }) => {
-    // const { professors } = useProfessors(fallbackData)
+    // const { professors } = useSWR('/professors', fallbackData)
     const { search } = useSearch({ data: fallbackData })
 
     const searchData = filterProfessors(search)
 
     return <SearchResults title='Professors' search={searchData} />
-    // return <SearchResults title='Professors' search={searchData} />
+    // return <SearchResults title='Professors' search={professors} />
 }
 
 export default Professors

@@ -1,5 +1,5 @@
 import SearchResults from "@components/search/SearchResults"
-import useSearch from "@utils/api/useSearch"
+import useSearch from "@utils/useSearch"
 import { useRouter } from "next/router"
 
 const Search = () => {

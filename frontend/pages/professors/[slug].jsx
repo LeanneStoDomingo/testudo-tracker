@@ -1,15 +1,14 @@
 import CourseResults from "@components/search/CourseResults"
-import useProfessor from "@utils/api/useProfessor"
 import axios from "@utils/axios"
 import filterByCategory from "@utils/filterByCategory"
-import formatChartData from "@utils/formatChartData"
+import useSWR from "@utils/useSWR"
 import { useRouter } from "next/router"
 
 const Professor = ({ fallbackData }) => {
     const router = useRouter()
     const { slug } = router.query
 
-    const { name, seats, courses } = useProfessor(slug, fallbackData)
+    const { name, seats, courses } = useSWR(`/professors/${slug}`, fallbackData)
 
     // temp solution until api endpoint includes link and text
     const results = courses.map(({ code, name }) => ({
@@ -19,7 +18,7 @@ const Professor = ({ fallbackData }) => {
         text: `${code} ${name}`
     }))
 
-    return <CourseResults title={name} results={results} chartData={formatChartData(seats)} />
+    return <CourseResults title={name} results={results} seats={seats} />
 }
 
 export default Professor

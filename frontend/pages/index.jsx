@@ -1,5 +1,5 @@
 import SearchBar from "@components/search/SearchBar"
-import useSearch from "@utils/api/useSearch"
+import useSearch from "@utils/useSearch"
 
 const Home = () => {
     const { search } = useSearch()

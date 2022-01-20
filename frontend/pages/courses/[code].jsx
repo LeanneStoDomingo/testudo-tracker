@@ -1,25 +1,21 @@
 import Chart from "@components/Chart"
-// import useCourse from "@utils/api/useCourse"
 import axios from "@utils/axios"
 import filterByCategory from "@utils/filterByCategory"
-import formatChartData from "@utils/formatChartData"
 import useSWR from "@utils/useSWR"
 import { useRouter } from "next/router"
-// import useSWR from "swr"
 
 
 const Course = ({ fallbackData }) => {
     const router = useRouter()
     const { code } = router.query
 
-    // const { name, seats } = useCourse(code, fallbackData)
     const { name, seats } = useSWR(`/courses/${code}`, fallbackData)
 
     return (
         <>
             <h1>{code}</h1>
             <p>{name}</p>
-            <Chart data={formatChartData(seats)} />
+            <Chart seats={seats} />
         </>
     )
 }
