@@ -3,9 +3,9 @@ import Link from "next/link"
 const Footer = () => {
     return (
         <footer>
-            <Link href='\'><a>Testudo Tracker</a></Link>
-            <a href="https://github.com/LeanneStoDomingo/testudo-tracker">GitHub</a>
-            <a href="https://www.reddit.com/user/testudo-tracker">Reddit</a>
+            <Link href='/'><a>Testudo Tracker</a></Link>
+            <Link href='/github'><a>GitHub</a></Link>
+            <Link href='/reddit'><a>Reddit</a></Link>
         </footer>
     )
 }
