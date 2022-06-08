@@ -1,57 +1,8 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
 import { useRouter } from "next/router";
-import { useReducer } from "react";
+import { Listbox } from "@headlessui/react";
 import SeatsChart from "@/components/SeatsChart";
-
-interface IOption {
-  label: string;
-  professors?: string[];
-  semesters?: string[];
-  sections?: string[];
-}
-
-const categories = ["semesters", "professors", "sections"] as const;
-type TCategory = typeof categories[number];
-
-interface IState {
-  [key: string]: string[];
-}
-
-interface IAction {
-  type: string;
-  category: string;
-  payload: string;
-}
-
-type TReducer = (state: IState, action: IAction) => IState;
-
-interface IReduce {
-  [key: string]: TReducer;
-}
-
-const initialState = {
-  semesters: [],
-  professors: [],
-  sections: [],
-};
-
-const reduce: IReduce = {
-  select: (state, action) => ({
-    ...state,
-    [action.category]: [...state[action.category], action.payload],
-  }),
-  deselect: (state, action) => ({
-    ...state,
-    [action.category]: [...state[action.category]].splice(
-      state[action.category].indexOf(action.payload),
-      1
-    ),
-  }),
-};
-
-const reducer: TReducer = (state, action) => {
-  return reduce[action.type](state, action);
-};
+import useFilters from "@/hooks/useFilters";
 
 const Course = ({
   code,
@@ -61,27 +12,8 @@ const Course = ({
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const router = useRouter();
 
-  const [selected, dispatch] = useReducer(reducer, initialState);
-
-  const getOptions = (category: TCategory) =>
-    filters[category].map((elt: IOption) => ({
-      value: elt.label,
-      label: elt.label,
-      disabled: categories
-        .filter((item) => item !== category)
-        .reduce(
-          (acc, curr) =>
-            acc ||
-            selected[curr].reduce((a, c) => a || c in selected[curr], false),
-          false
-        ),
-    }));
-
-  const options = Object.fromEntries(
-    categories.map((c) => {
-      return [c, getOptions(c)];
-    })
-  );
+  const { categories, options, selected, setSelected, clearSelected } =
+    useFilters(filters);
 
   if (router.isFallback) return <>Loading...</>;
 
@@ -89,6 +21,32 @@ const Course = ({
     <>
       <h1>{code}</h1>
       <p>{name}</p>
+      {categories.map((category) => (
+        <div key={category}>
+          <Listbox
+            value={selected[category]}
+            onChange={setSelected(category)}
+            multiple
+          >
+            <Listbox.Button>
+              {selected[category].join(", ") || "None selected"}
+            </Listbox.Button>
+            <Listbox.Options>
+              {options[category].map((option) => (
+                <Listbox.Option
+                  key={option.key}
+                  value={option.value}
+                  disabled={option.disabled}
+                  className={option.disabled ? "text-gray-500" : ""}
+                >
+                  {option.label}
+                </Listbox.Option>
+              ))}
+            </Listbox.Options>
+          </Listbox>
+          <button onClick={clearSelected(category)}>Clear</button>
+        </div>
+      ))}
       <SeatsChart data={data} />
     </>
   );
