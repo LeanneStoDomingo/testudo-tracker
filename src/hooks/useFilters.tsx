@@ -64,6 +64,8 @@ const useFilters = (filters: IFilters) => {
       sections: [],
     };
 
+    if (filters === undefined) return options;
+
     categories.forEach((category) => {
       options[category] = filters[category].map((filter) => {
         return {
