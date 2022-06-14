@@ -16,11 +16,14 @@
     "@trpc/next": "^9.25.2",
     "@trpc/react": "^9.25.2",
     "@trpc/server": "^9.25.2",
+    "axios": "^0.27.2",
+    "cheerio": "^1.0.0-rc.11",
     "next": "12.1.6",
     "react": "18.1.0",
     "react-charts": "^3.0.0-beta.36",
     "react-dom": "18.1.0",
     "react-query": "^3.39.1",
+    "slugify": "^1.6.5",
     "zod": "^3.17.3"
   },
   "devDependencies": {
