@@ -32,6 +32,33 @@ export const appRouter = trpc
         data,
       };
     },
+  })
+  .query("search", {
+    input: z.object({
+      query: z.string(),
+    }),
+    resolve: async ({ input }) => {
+      const results = [
+        {
+          label: "CMSC132 Object-Oriented Programming II",
+          link: "/courses/CMSC132",
+        },
+        {
+          label: "AAST443 Asian American Politics",
+          link: "/courses/AAST443",
+        },
+        {
+          label: "MATH241 Calculus II",
+          link: "/courses/MATH241",
+        },
+      ];
+      return results.filter((result) => {
+        return result.label
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, "")
+          .includes(input.query.toLowerCase().replace(/[^a-z0-9]/g, ""));
+      });
+    },
   });
 
 export type AppRouter = typeof appRouter;
