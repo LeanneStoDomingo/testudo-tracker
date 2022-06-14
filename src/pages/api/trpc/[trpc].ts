@@ -5,17 +5,6 @@ import { name, filters, data } from "@/utils/exampleCourse";
 
 export const appRouter = trpc
   .router()
-  .query("course.info", {
-    input: z.object({
-      code: z.string(),
-    }),
-    resolve: ({ input }) => {
-      return {
-        code: input.code,
-        name,
-      };
-    },
-  })
   .query("course.data", {
     input: z.object({
       code: z.string(),

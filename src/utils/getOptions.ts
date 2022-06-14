@@ -29,17 +29,14 @@ type TOptions = {
   [key in TCategory]: IOption[];
 };
 
-const getOptions = (
-  filters: IFilters | null,
-  selected: TSelected
-): TOptions => {
+const getOptions = (filters: IFilters, selected: TSelected): TOptions => {
   const options: { [key in TCategory]: any } = {
     semesters: [],
     professors: [],
     sections: [],
   };
 
-  if (filters === undefined || filters === null) return options;
+  if (filters === undefined) return options;
 
   categories.forEach((category) => {
     options[category] = filters[category].map((filter) => {

@@ -61,7 +61,7 @@ const Course = ({
           <button onClick={clearSelected(category)}>Clear</button>
         </div>
       ))}
-      <SeatsChart data={course.data.data || []} />
+      <SeatsChart data={course.data.data} />
     </>
   );
 };
