@@ -1,7 +1,7 @@
 import * as trpc from "@trpc/server";
 import * as trpcNext from "@trpc/server/adapters/next";
 import { z } from "zod";
-import { name, filters, data } from "@/utils/exampleCourse";
+import { exampleCourse, exampleSearch } from "@/utils/constants";
 
 export const appRouter = trpc
   .router()
@@ -16,9 +16,9 @@ export const appRouter = trpc
     }),
     resolve: ({ input }) => {
       return {
-        name,
-        filters,
-        data,
+        name: exampleCourse.name,
+        filters: exampleCourse.filters,
+        data: exampleCourse.data,
       };
     },
   })
@@ -27,21 +27,7 @@ export const appRouter = trpc
       query: z.string(),
     }),
     resolve: async ({ input }) => {
-      const results = [
-        {
-          label: "CMSC132 Object-Oriented Programming II",
-          link: "/courses/CMSC132",
-        },
-        {
-          label: "AAST443 Asian American Politics",
-          link: "/courses/AAST443",
-        },
-        {
-          label: "MATH241 Calculus II",
-          link: "/courses/MATH241",
-        },
-      ];
-      return results.filter((result) => {
+      return exampleSearch.results.filter((result) => {
         return result.label
           .toLowerCase()
           .replace(/[^a-z0-9]/g, "")

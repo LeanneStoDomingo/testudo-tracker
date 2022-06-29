@@ -5,8 +5,7 @@ import { trpc } from "@/utils/trpc";
 import getOptions from "@/utils/getOptions";
 import SeatsChart from "@/components/SeatsChart";
 import useSelectedOptions from "@/hooks/useSelectedOptions";
-import categories from "@/utils/categories";
-import { name, paths } from "@/utils/exampleCourse";
+import { categories, exampleCourse } from "@/utils/constants";
 
 const Course = ({
   code,
@@ -74,14 +73,14 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   return {
     props: {
       code: params.code as string,
-      name,
+      name: exampleCourse.name,
     },
   };
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
-    paths: paths.map((path) => ({ params: { code: path } })),
+    paths: exampleCourse.paths.map((path) => ({ params: { code: path } })),
     fallback: true,
   };
 };
