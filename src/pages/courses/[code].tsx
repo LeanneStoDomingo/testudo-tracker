@@ -1,7 +1,7 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
 import { useRouter } from "next/router";
 import { Listbox } from "@headlessui/react";
-import { trpc } from "@/utils/trpc";
+import { trpc } from "@/hooks/trpc";
 import getOptions from "@/utils/getOptions";
 import SeatsChart from "@/components/SeatsChart";
 import useSelectedOptions from "@/hooks/useSelectedOptions";

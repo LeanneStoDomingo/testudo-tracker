@@ -2,7 +2,7 @@ import { useDeferredValue, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { Combobox } from "@headlessui/react";
-import { trpc } from "@/utils/trpc";
+import { trpc } from "@/hooks/trpc";
 
 const SearchBar: React.FC<{ initialQuery?: string }> = ({
   initialQuery = "",

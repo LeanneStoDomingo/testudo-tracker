@@ -3,7 +3,7 @@ import Script from "next/script";
 import "@/styles/globals.css";
 import "@fontsource/inter";
 import { withTRPC } from "@trpc/next";
-import { AppRouter } from "./api/trpc/[trpc]";
+import { AppRouter } from "@/backend/router";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { ReactQueryDevtools } from "react-query/devtools";
