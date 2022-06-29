@@ -16,14 +16,12 @@ const App: AppType = ({ Component, pageProps }) => {
         data-website-id={process.env.NEXT_PUBLIC_UMAMI_ID}
         src={process.env.NEXT_PUBLIC_UMAMI_URL}
       />
-      <div className="flex min-h-screen flex-col">
-        <Header />
-        <main className="grow">
-          <Component {...pageProps} />
-        </main>
-        <Footer />
-      </div>
-      <ReactQueryDevtools initialIsOpen={false} />
+      <Header />
+      <main>
+        <Component {...pageProps} />
+      </main>
+      <Footer />
+      <ReactQueryDevtools />
     </>
   );
 };
