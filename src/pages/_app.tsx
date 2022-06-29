@@ -7,6 +7,8 @@ import { AppRouter } from "@/backend/router";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { loggerLink } from "@trpc/client/links/loggerLink";
+import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
 
 const App: AppType = ({ Component, pageProps }) => {
   return (
@@ -34,7 +36,17 @@ export default withTRPC<AppRouter>({
      */
 
     return {
-      url: "/api/trpc",
+      links: [
+        loggerLink({
+          enabled: (opts) =>
+            (process.env.NODE_ENV !== "production" &&
+              typeof window !== "undefined") ||
+            (opts.direction === "down" && opts.result instanceof Error),
+        }),
+        httpBatchLink({
+          url: "/api/trpc",
+        }),
+      ],
       queryClientConfig: {
         defaultOptions: {
           queries: {
