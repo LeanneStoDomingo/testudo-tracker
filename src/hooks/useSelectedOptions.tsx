@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TCategory, TSelected } from "@/utils/constants";
+import { TCategory, TSelected } from "@/utils/types";
 
 const useSelectedOptions = () => {
   const [selected, dispatchSelected] = useState<TSelected>({

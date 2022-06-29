@@ -1,4 +1,5 @@
-import { categories, TCategory, TSelected } from "@/utils/constants";
+import { categories } from "@/utils/constants";
+import { TCategory, TSelected } from "@/utils/types";
 
 interface IFilters {
   semesters: {

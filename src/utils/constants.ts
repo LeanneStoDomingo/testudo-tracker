@@ -1,11 +1,5 @@
 export const categories = ["semesters", "professors", "sections"] as const;
 
-export type TCategory = typeof categories[number];
-
-export type TSelected = {
-  [key in TCategory]: string[];
-};
-
 export const exampleCourse = {
   name: "Object-Oriented Programming II",
   filters: {
