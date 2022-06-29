@@ -15,8 +15,10 @@ datasource db {
 model Semester {
   id String @id @default(cuid())
 
-  start_date DateTime @unique
-  end_date   DateTime @unique
+  createdAt DateTime @default(now())
+
+  startDate DateTime @unique
+  endDate   DateTime @unique
 
   season Season
   year   Int
@@ -25,28 +27,36 @@ model Semester {
 }
 
 model Department {
-  code String @id
+  id String @id @default(cuid())
+
+  code String @unique
   name String
 
   courses Course[]
 }
 
 model Gened {
-  code String @id
+  id String @id @default(cuid())
+
+  code String @unique
   name String
 
   courses Course[]
 }
 
 model Professor {
-  slug String @id
+  id String @id @default(cuid())
+
+  slug String @unique
   name String
 
   sections Section[]
 }
 
 model Course {
-  code String @id
+  id String @id @default(cuid())
+
+  code String @unique
   name String
 
   department     Department @relation(fields: [departmentCode], references: [code])
@@ -58,7 +68,10 @@ model Course {
 }
 
 model Section {
-  id   String @id @default(cuid())
+  id String @id @default(cuid())
+
+  updatedAt DateTime @updatedAt
+
   code String
 
   course     Course @relation(fields: [courseCode], references: [code])
@@ -70,15 +83,19 @@ model Section {
   semesterId String
 
   days Day[]
+
+  @@unique([code, courseCode, semesterId], name: "sectionIdentifier")
 }
 
 model Day {
   id String @id @default(cuid())
 
-  total_seats    Int
-  open_seats     Int
-  waitlist_seats Int
-  holdfile_seats Int
+  createdAt DateTime @default(now())
+
+  totalSeats    Int
+  openSeats     Int
+  waitlistSeats Int
+  holdfileSeats Int
 
   section   Section @relation(fields: [sectionId], references: [id])
   sectionId String
