@@ -59,8 +59,8 @@ model Course {
   code String @unique
   name String
 
-  department     Department @relation(fields: [departmentCode], references: [code])
-  departmentCode String
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId String
 
   geneds Gened[]
 
@@ -74,8 +74,8 @@ model Section {
 
   code String
 
-  course     Course @relation(fields: [courseCode], references: [code])
-  courseCode String
+  course   Course @relation(fields: [courseId], references: [id])
+  courseId String
 
   professors Professor[]
 
@@ -84,7 +84,7 @@ model Section {
 
   days Day[]
 
-  @@unique([code, courseCode, semesterId], name: "sectionIdentifier")
+  @@unique([code, courseId, semesterId], name: "sectionIdentifier")
 }
 
 model Day {
