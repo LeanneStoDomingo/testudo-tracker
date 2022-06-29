@@ -24,7 +24,8 @@ const Course = ({
       <>
         <h1>{code}</h1>
         <p>{name}</p>
-        <div>Loading...</div>
+        {course.isLoading && <div>Loading...</div>}
+        {course.isError && <div>Error!!!</div>}
       </>
     );
 

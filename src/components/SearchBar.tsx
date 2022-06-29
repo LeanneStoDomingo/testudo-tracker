@@ -12,7 +12,9 @@ const SearchBar: React.FC<{ initialQuery?: string }> = ({
   const [query, setQuery] = useState(initialQuery);
   const deferredQuery = useDeferredValue(query);
 
-  const filteredResults = trpc.useQuery(["search", { query: deferredQuery }]);
+  const filteredResults = trpc.useQuery(["search", { query: deferredQuery }], {
+    enabled: !!deferredQuery,
+  });
 
   const onChange = (selected?: string) => {
     if (selected === null || !filteredResults.data) return;
