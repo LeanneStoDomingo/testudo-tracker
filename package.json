@@ -3,10 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "concurrently -n : \"npm:dev:*\"",
+    "dev:next": "next dev",
+    "dev:db": "prisma studio",
+    "db:push": "prisma db push",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@fontsource/inter": "^4.5.10",
@@ -31,6 +35,7 @@
     "@types/react": "18.0.11",
     "@types/react-dom": "18.0.5",
     "autoprefixer": "^10.4.7",
+    "concurrently": "^7.2.2",
     "eslint": "8.17.0",
     "eslint-config-next": "12.1.6",
     "eslint-config-prettier": "^8.5.0",
