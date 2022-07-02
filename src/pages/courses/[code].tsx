@@ -1,4 +1,4 @@
-import { GetStaticPaths, GetStaticPropsContext, NextPage } from "next";
+import type { GetStaticPaths, GetStaticPropsContext, NextPage } from "next";
 import { useRouter } from "next/router";
 import { Listbox } from "@headlessui/react";
 import { trpc } from "@/hooks/trpc";
