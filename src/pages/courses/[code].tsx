@@ -1,4 +1,4 @@
-import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
+import { GetStaticPaths, GetStaticPropsContext, NextPage } from "next";
 import { useRouter } from "next/router";
 import { Listbox } from "@headlessui/react";
 import { trpc } from "@/hooks/trpc";
@@ -6,11 +6,12 @@ import getOptions from "@/utils/getOptions";
 import SeatsChart from "@/components/SeatsChart";
 import useSelectedOptions from "@/hooks/useSelectedOptions";
 import { categories, exampleCourse } from "@/utils/constants";
+import type { inferSSGProps } from "@/utils/types";
 
-const Course = ({
+const Course: NextPage<inferSSGProps<typeof getStaticProps>> = ({
   code,
   name,
-}: InferGetStaticPropsType<typeof getStaticProps>) => {
+}) => {
   const router = useRouter();
 
   const { selected, setSelected, clearSelected } = useSelectedOptions();
@@ -68,12 +69,14 @@ const Course = ({
 
 export default Course;
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  if (!params) return { notFound: true };
+export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
+  if (!params || !params.code || typeof params.code !== "string") {
+    return { notFound: true };
+  }
 
   return {
     props: {
-      code: params.code as string,
+      code: params.code,
       name: exampleCourse.name,
     },
   };
