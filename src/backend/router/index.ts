@@ -1,7 +1,12 @@
 import * as trpc from "@trpc/server";
 import { z } from "zod";
 import { Context } from "@/backend/context";
-import { exampleCourse, exampleSearch } from "@/utils/constants";
+import {
+  exampleCourse,
+  exampleDepartment,
+  exampleSearch,
+  exampleSeats,
+} from "@/utils/constants";
 
 export const createRouter = () => {
   return trpc.router<Context>();
@@ -22,6 +27,18 @@ export const appRouter = createRouter()
         name: exampleCourse.name,
         filters: exampleCourse.filters,
         data: exampleCourse.data,
+      };
+    },
+  })
+  .query("department", {
+    input: z.object({
+      code: z.string(),
+    }),
+    resolve: async ({ input }) => {
+      return {
+        name: exampleDepartment.name,
+        seats: exampleSeats,
+        courses: exampleDepartment.courses,
       };
     },
   })
