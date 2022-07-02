@@ -5,6 +5,7 @@ import {
   exampleCourse,
   exampleDepartment,
   exampleSearch,
+  groupings,
 } from "@/utils/constants";
 
 export const createRouter = () => {
@@ -12,7 +13,7 @@ export const createRouter = () => {
 };
 
 export const appRouter = createRouter()
-  .query("course.data", {
+  .query("course", {
     input: z.object({
       code: z.string(),
       selected: z.object({
@@ -44,8 +45,15 @@ export const appRouter = createRouter()
   .query("search", {
     input: z.object({
       query: z.string(),
+      type: z.enum(groupings).optional(),
+      payload: z.string().optional(),
     }),
     resolve: async ({ input }) => {
+      if (!!input.type && !!input.payload) {
+        return exampleDepartment.courses.filter((result) => {
+          return result.label.toLowerCase().includes(input.query.toLowerCase());
+        });
+      }
       return exampleSearch.results.filter((result) => {
         return result.label
           .toLowerCase()

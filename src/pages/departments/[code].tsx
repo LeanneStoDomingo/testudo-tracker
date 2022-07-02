@@ -32,7 +32,7 @@ const Department: NextPage<inferSSGProps<typeof getStaticProps>> = ({
       <h1>{code}</h1>
       <p>{department.data.name}</p>
       <SeatsChart data={department.data.seats} />
-      <SearchBar initialResults={department.data.courses} />
+      <SearchBar type="department" payload={code} />
       <ul>
         {department.data.courses.map((result) => (
           <li key={result.link}>

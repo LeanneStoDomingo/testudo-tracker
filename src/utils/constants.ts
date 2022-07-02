@@ -1,4 +1,5 @@
 export const categories = ["semesters", "professors", "sections"] as const;
+export const groupings = ["department", "gened", "professor"] as const;
 
 const exampleSeats = [
   {
