@@ -1,6 +1,6 @@
 export const categories = ["semesters", "professors", "sections"] as const;
 
-export const exampleSeats = [
+const exampleSeats = [
   {
     label: "Total",
     data: [
@@ -107,52 +107,7 @@ export const exampleCourse = {
       },
     ],
   },
-  data: [
-    {
-      label: "Total",
-      data: [
-        { day: 0, seats: 10 },
-        { day: 1, seats: 10 },
-        { day: 2, seats: 10 },
-        { day: 3, seats: 10 },
-        { day: 4, seats: 10 },
-        { day: 5, seats: 10 },
-      ],
-    },
-    {
-      label: "Open",
-      data: [
-        { day: 0, seats: 10 },
-        { day: 1, seats: 7 },
-        { day: 2, seats: 3 },
-        { day: 3, seats: 0 },
-        { day: 4, seats: 0 },
-        { day: 5, seats: 1 },
-      ],
-    },
-    {
-      label: "Waitlist",
-      data: [
-        { day: 0, seats: 0 },
-        { day: 1, seats: 0 },
-        { day: 2, seats: 0 },
-        { day: 3, seats: 4 },
-        { day: 4, seats: 2 },
-        { day: 5, seats: 0 },
-      ],
-    },
-    {
-      label: "Holdfile",
-      data: [
-        { day: 0, seats: 0 },
-        { day: 1, seats: 1 },
-        { day: 2, seats: 2 },
-        { day: 3, seats: 1 },
-        { day: 4, seats: 0 },
-        { day: 5, seats: 0 },
-      ],
-    },
-  ],
+  data: exampleSeats,
   paths: ["CMSC132"],
 };
 
@@ -172,6 +127,7 @@ export const exampleDepartment = {
       link: "/courses/CMSC351",
     },
   ],
+  seats: exampleSeats,
   paths: ["CMSC"],
 };
 

@@ -5,7 +5,6 @@ import {
   exampleCourse,
   exampleDepartment,
   exampleSearch,
-  exampleSeats,
 } from "@/utils/constants";
 
 export const createRouter = () => {
@@ -37,7 +36,7 @@ export const appRouter = createRouter()
     resolve: async ({ input }) => {
       return {
         name: exampleDepartment.name,
-        seats: exampleSeats,
+        seats: exampleDepartment.seats,
         courses: exampleDepartment.courses,
       };
     },
