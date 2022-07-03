@@ -1,13 +1,11 @@
 import SearchBar from "@/components/SearchBar";
+import { seo } from "@/utils/constants";
 
 const Home = () => {
   return (
     <>
-      <h1>Testudo Tracker</h1>
-      <p>
-        A website that tracks seat availability for courses at the University of
-        Maryland, College Park.
-      </p>
+      <h1>{seo.title}</h1>
+      <p>{seo.description}</p>
       <SearchBar />
     </>
   );

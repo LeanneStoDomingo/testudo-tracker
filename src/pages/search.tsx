@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { NextSeo } from "next-seo";
 import { trpc } from "@/hooks/trpc";
 import SearchBar from "@/components/SearchBar";
 import SearchResults from "@/components/SearchResults";
@@ -13,6 +14,7 @@ const Search = () => {
 
   return (
     <>
+      <NextSeo title="Search" />
       <h1>Search</h1>
       <SearchBar initialQuery={q} />
       {results.isError && <>Error!!!</>}

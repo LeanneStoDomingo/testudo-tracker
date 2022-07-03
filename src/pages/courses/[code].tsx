@@ -1,5 +1,6 @@
 import type { GetStaticPaths, GetStaticPropsContext, NextPage } from "next";
 import { useRouter } from "next/router";
+import { NextSeo } from "next-seo";
 import { Listbox } from "@headlessui/react";
 import { trpc } from "@/hooks/trpc";
 import getOptions from "@/utils/getOptions";
@@ -23,6 +24,7 @@ const Course: NextPage<inferSSGProps<typeof getStaticProps>> = ({
   if (!course.data)
     return (
       <>
+        <NextSeo title={code} />
         <h1>{code}</h1>
         <p>{name}</p>
         {course.isLoading && <div>Loading...</div>}
@@ -32,6 +34,7 @@ const Course: NextPage<inferSSGProps<typeof getStaticProps>> = ({
 
   return (
     <>
+      <NextSeo title={code} />
       <h1>{code}</h1>
       <p>{course.data.name}</p>
       {categories.map((category) => (

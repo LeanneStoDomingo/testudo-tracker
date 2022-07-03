@@ -1,5 +1,6 @@
 import type { GetStaticPaths, GetStaticPropsContext, NextPage } from "next";
 import { useRouter } from "next/router";
+import { NextSeo } from "next-seo";
 import { exampleProfessor } from "@/utils/constants";
 import type { inferSSGProps } from "@/utils/types";
 import { trpc } from "@/hooks/trpc";
@@ -20,6 +21,7 @@ const Professor: NextPage<inferSSGProps<typeof getStaticProps>> = ({
   if (!professor.data)
     return (
       <>
+        <NextSeo title={name} />
         <h1>{name}</h1>
         {professor.isLoading && <div>Loading...</div>}
         {professor.isError && <div>Error!!!</div>}
@@ -28,6 +30,7 @@ const Professor: NextPage<inferSSGProps<typeof getStaticProps>> = ({
 
   return (
     <>
+      <NextSeo title={name} />
       <h1>{name}</h1>
       <SeatsChart data={professor.data.seats} />
       <SearchBar type="professor" payload={slug} />

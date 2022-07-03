@@ -1,6 +1,13 @@
 export const categories = ["semesters", "professors", "sections"] as const;
 export const groupings = ["department", "gened", "professor"] as const;
 
+export const seo = {
+  title: "Testudo Tracker",
+  description:
+    "A website that tracks seat availability for courses at the University of Maryland, College Park.",
+  url: "https://www.testudotracker.com/",
+};
+
 const exampleSeats = [
   {
     label: "Total",

@@ -1,5 +1,6 @@
 import type { AppType } from "next/dist/shared/lib/utils";
 import Script from "next/script";
+import { DefaultSeo } from "next-seo";
 import "@/styles/globals.css";
 import "@fontsource/inter";
 import { withTRPC } from "@trpc/next";
@@ -9,10 +10,24 @@ import Header from "@/components/Header";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { loggerLink } from "@trpc/client/links/loggerLink";
 import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
+import { seo } from "@/utils/constants";
 
 const App: AppType = ({ Component, pageProps }) => {
   return (
     <>
+      <DefaultSeo
+        defaultTitle={seo.title}
+        titleTemplate={`%s | ${seo.title}`}
+        description={seo.description}
+        openGraph={{
+          title: seo.title,
+          description: seo.description,
+          site_name: seo.title,
+          type: "website",
+          locale: "en_US",
+          url: seo.url,
+        }}
+      />
       <Script
         strategy="afterInteractive"
         data-website-id={process.env.NEXT_PUBLIC_UMAMI_ID}

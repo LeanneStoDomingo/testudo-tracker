@@ -23,6 +23,7 @@
     "axios": "^0.27.2",
     "cheerio": "^1.0.0-rc.11",
     "next": "^12.2.0",
+    "next-seo": "^5.4.0",
     "react": "18.1.0",
     "react-charts": "^3.0.0-beta.36",
     "react-dom": "18.1.0",
