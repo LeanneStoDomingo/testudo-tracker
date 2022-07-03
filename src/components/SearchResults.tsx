@@ -1,18 +1,12 @@
-import { trpc } from "@/hooks/trpc";
 import Link from "next/link";
+import type { InferQueryOutput } from "@/hooks/trpc";
 
-const SearchResults: React.FC<{ query: string }> = ({ query }) => {
-  const results = trpc.useQuery(["search", { query }], {
-    enabled: !!query,
-  });
+type Results = InferQueryOutput<"search">;
 
-  if (results.isError) return <>Error!!!</>;
-
-  if (results.isLoading || !results.data) return <>Loading...</>;
-
+const SearchResults: React.FC<{ results: Results }> = ({ results }) => {
   return (
     <ul>
-      {results.data.map((result) => (
+      {results.map((result) => (
         <li key={result.link}>
           <Link href={result.link}>
             <a>{result.label}</a>

@@ -5,7 +5,7 @@ import type { inferSSGProps } from "@/utils/types";
 import { exampleDepartment } from "@/utils/constants";
 import SeatsChart from "@/components/SeatsChart";
 import SearchBar from "@/components/SearchBar";
-import Link from "next/link";
+import SearchResults from "@/components/SearchResults";
 
 const Department: NextPage<inferSSGProps<typeof getStaticProps>> = ({
   code,
@@ -33,15 +33,7 @@ const Department: NextPage<inferSSGProps<typeof getStaticProps>> = ({
       <p>{department.data.name}</p>
       <SeatsChart data={department.data.seats} />
       <SearchBar type="department" payload={code} />
-      <ul>
-        {department.data.courses.map((result) => (
-          <li key={result.link}>
-            <Link href={result.link}>
-              <a>{result.label}</a>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <SearchResults results={department.data.courses} />
     </>
   );
 };
