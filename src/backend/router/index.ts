@@ -4,6 +4,7 @@ import type { Context } from "@/backend/context";
 import {
   exampleCourse,
   exampleDepartment,
+  exampleProfessor,
   exampleSearch,
   groupings,
 } from "@/utils/constants";
@@ -39,6 +40,18 @@ export const appRouter = createRouter()
         name: exampleDepartment.name,
         seats: exampleDepartment.seats,
         courses: exampleDepartment.courses,
+      };
+    },
+  })
+  .query("professor", {
+    input: z.object({
+      slug: z.string(),
+    }),
+    resolve: async ({ input }) => {
+      return {
+        name: exampleProfessor.name,
+        seats: exampleProfessor.seats,
+        courses: exampleProfessor.courses,
       };
     },
   })

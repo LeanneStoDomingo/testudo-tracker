@@ -132,6 +132,26 @@ export const exampleDepartment = {
   paths: ["CMSC"],
 };
 
+export const exampleProfessor = {
+  name: "John Doe",
+  courses: [
+    {
+      label: "CMSC132 Object-Oriented Programming II",
+      link: "/courses/CMSC132",
+    },
+    {
+      label: "CMSC250 Discrete Mathematics",
+      link: "/courses/CMSC250",
+    },
+    {
+      label: "CMSC351 Algorithms",
+      link: "/courses/CMSC351",
+    },
+  ],
+  seats: exampleSeats,
+  paths: ["john-doe"],
+};
+
 export const exampleSearch = {
   results: [
     {
