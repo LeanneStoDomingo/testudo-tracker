@@ -152,6 +152,26 @@ export const exampleProfessor = {
   paths: ["john-doe"],
 };
 
+export const exampleGened = {
+  name: "Math",
+  courses: [
+    {
+      label: "MATH140 Calculus I",
+      link: "/courses/MATH241",
+    },
+    {
+      label: "MATH141 Calculus II",
+      link: "/courses/MATH241",
+    },
+    {
+      label: "MATH241 Calculus III",
+      link: "/courses/CMSC250",
+    },
+  ],
+  seats: exampleSeats,
+  paths: ["FSMA"],
+};
+
 export const exampleSearch = {
   results: [
     {
@@ -163,7 +183,7 @@ export const exampleSearch = {
       link: "/courses/AAST443",
     },
     {
-      label: "MATH241 Calculus II",
+      label: "MATH241 Calculus III",
       link: "/courses/MATH241",
     },
   ],
