@@ -9,30 +9,29 @@ import { formattedGroupings, noneSelected } from "@/utils/constants";
 
 const Search = () => {
   const router = useRouter();
-  const q = router.query.q as string;
-  const filter = router.query.filter as string;
+  const q = (router.query.q || "") as string;
+  const filterParam = router.query.filter as string;
 
-  const { selectedFilter, setSelectedFilter } = useSearchFilter(filter);
+  const { selectedFilter, setSelectedFilter } = useSearchFilter(filterParam);
+
+  const filter = selectedFilter !== noneSelected ? selectedFilter : undefined;
 
   const results = trpc.useQuery(
     [
       "search",
       {
         query: q,
-        filter: selectedFilter !== noneSelected ? selectedFilter : undefined,
+        filter,
       },
     ],
-    { enabled: !!q }
+    { enabled: !!q || !!filter }
   );
 
   return (
     <>
       <NextSeo title="Search" />
       <h1>Search</h1>
-      <SearchBar
-        initialQuery={q}
-        filter={selectedFilter !== noneSelected ? selectedFilter : undefined}
-      />
+      <SearchBar initialQuery={q} filter={filter} />
       <Listbox value={selectedFilter} onChange={setSelectedFilter}>
         <Listbox.Button className="capitalize">{selectedFilter}</Listbox.Button>
         <Listbox.Options>
