@@ -203,15 +203,15 @@ export const exampleSearch = {
       link: "/courses/MATH241",
     },
     {
-      label: "CMSC",
+      label: "CMSC Computer Science",
       link: "/departments/CMSC",
     },
     {
-      label: "AAST",
+      label: "AAST Asian American Studies",
       link: "/departments/AAST",
     },
     {
-      label: "MATH",
+      label: "MATH Mathematics",
       link: "/departments/MATH",
     },
     {
