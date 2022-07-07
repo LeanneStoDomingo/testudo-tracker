@@ -25,7 +25,16 @@ const SearchBar: React.FC<{
   );
 
   const onChange = (selected?: string) => {
-    if (selected === null || !filteredResults.data) return;
+    if (selected === null) return;
+
+    if (!filteredResults.data) {
+      const url = !!filter
+        ? `/search?q=${query}&filter=${filter}`
+        : `/search?q=${query}`;
+
+      router.push(url);
+      return;
+    }
 
     const index = filteredResults.data.findIndex(
       (result) => result.label === selected
@@ -54,6 +63,7 @@ const SearchBar: React.FC<{
   return (
     <form onSubmit={onSubmit}>
       <Combobox value={query} onChange={onChange} nullable>
+        <Combobox.Label className="sr-only">Search Bar</Combobox.Label>
         <Combobox.Input onChange={(e) => setQuery(e.target.value)} />
         <Combobox.Options>
           <Combobox.Option value={query} className="hidden">
