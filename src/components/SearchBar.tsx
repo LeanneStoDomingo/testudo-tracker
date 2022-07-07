@@ -1,9 +1,10 @@
-import { useDeferredValue, useState } from "react";
+import { useDeferredValue } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { Combobox } from "@headlessui/react";
 import { trpc } from "@/hooks/trpc";
 import { groupings } from "@/utils/constants";
+import useURLQuery from "@/hooks/useURLQuery";
 
 type Groupings = typeof groupings[number];
 
@@ -11,17 +12,16 @@ const SearchBar: React.FC<{
   initialQuery?: string;
   type?: Groupings;
   payload?: string;
-}> = ({ initialQuery = "", type, payload }) => {
+  filter?: string;
+}> = ({ initialQuery = "", type, payload, filter }) => {
   const router = useRouter();
 
-  const [query, setQuery] = useState(initialQuery);
+  const { query, setQuery } = useURLQuery(initialQuery);
   const deferredQuery = useDeferredValue(query);
 
   const filteredResults = trpc.useQuery(
-    ["search", { query: deferredQuery, type, payload }],
-    {
-      enabled: !!deferredQuery,
-    }
+    ["search", { query: deferredQuery, type, payload, filter }],
+    { enabled: !!deferredQuery }
   );
 
   const onChange = (selected?: string) => {
@@ -39,6 +39,8 @@ const SearchBar: React.FC<{
     const url =
       filteredResults.data.length === 1
         ? filteredResults.data[0].link
+        : !!filter
+        ? `/search?q=${query}&filter=${filter}`
         : `/search?q=${query}`;
 
     router.push(url);

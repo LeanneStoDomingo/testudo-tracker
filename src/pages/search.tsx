@@ -1,22 +1,59 @@
 import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
+import { Listbox } from "@headlessui/react";
 import { trpc } from "@/hooks/trpc";
+import useSearchFilter from "@/hooks/useSearchFilter";
 import SearchBar from "@/components/SearchBar";
 import SearchResults from "@/components/SearchResults";
+import { formattedGroupings, noneSelected } from "@/utils/constants";
 
 const Search = () => {
   const router = useRouter();
   const q = router.query.q as string;
+  const filter = router.query.filter as string;
 
-  const results = trpc.useQuery(["search", { query: q }], {
-    enabled: !!q,
-  });
+  const { selectedFilter, setSelectedFilter } = useSearchFilter(filter);
+
+  const results = trpc.useQuery(
+    [
+      "search",
+      {
+        query: q,
+        filter: selectedFilter !== noneSelected ? selectedFilter : undefined,
+      },
+    ],
+    { enabled: !!q }
+  );
 
   return (
     <>
       <NextSeo title="Search" />
       <h1>Search</h1>
-      <SearchBar initialQuery={q} />
+      <SearchBar
+        initialQuery={q}
+        filter={selectedFilter !== noneSelected ? selectedFilter : undefined}
+      />
+      <Listbox value={selectedFilter} onChange={setSelectedFilter}>
+        <Listbox.Button className="capitalize">{selectedFilter}</Listbox.Button>
+        <Listbox.Options>
+          <Listbox.Option
+            key={noneSelected}
+            value={noneSelected}
+            className="capitalize"
+          >
+            {noneSelected}
+          </Listbox.Option>
+          {formattedGroupings.map((filter) => (
+            <Listbox.Option
+              key={filter as string}
+              value={filter}
+              className="capitalize"
+            >
+              {filter}
+            </Listbox.Option>
+          ))}
+        </Listbox.Options>
+      </Listbox>
       {results.isError && <>Error!!!</>}
       {results.isLoading && <>Loading...</>}
       {!!results.data && <SearchResults results={results.data} />}

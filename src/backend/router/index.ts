@@ -73,6 +73,7 @@ export const appRouter = createRouter()
       query: z.string(),
       type: z.enum(groupings).optional(),
       payload: z.string().optional(),
+      filter: z.string().optional(),
     }),
     resolve: async ({ input }) => {
       if (!!input.type && !!input.payload) {
@@ -80,6 +81,16 @@ export const appRouter = createRouter()
           return result.label.toLowerCase().includes(input.query.toLowerCase());
         });
       }
+
+      if (!!input.filter) {
+        const filter = input.filter;
+        return exampleSearch.results
+          .filter((result) => result.link.includes(filter))
+          .filter((result) =>
+            result.label.toLowerCase().includes(input.query.toLowerCase())
+          );
+      }
+
       return exampleSearch.results.filter((result) => {
         return result.label
           .toLowerCase()

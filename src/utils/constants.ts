@@ -1,5 +1,14 @@
 export const categories = ["semesters", "professors", "sections"] as const;
-export const groupings = ["department", "gened", "professor"] as const;
+export const groupings = [
+  "department",
+  "gened",
+  "professor",
+  "course",
+] as const;
+
+export const formattedGroupings = groupings.map((grouping) => `${grouping}s`);
+
+export const noneSelected = "none selected";
 
 export const seo = {
   title: "Testudo Tracker",
@@ -192,6 +201,42 @@ export const exampleSearch = {
     {
       label: "MATH241 Calculus III",
       link: "/courses/MATH241",
+    },
+    {
+      label: "CMSC",
+      link: "/departments/CMSC",
+    },
+    {
+      label: "AAST",
+      link: "/departments/AAST",
+    },
+    {
+      label: "MATH",
+      link: "/departments/MATH",
+    },
+    {
+      label: "John Doe",
+      link: "/professors/john-doe",
+    },
+    {
+      label: "Jane Doe",
+      link: "/professors/jane-doe",
+    },
+    {
+      label: "Ronald McDonald",
+      link: "/professors/ronald-mcdonald",
+    },
+    {
+      label: "FSAW Academic Writing",
+      link: "/geneds/FSAW",
+    },
+    {
+      label: "SCIS I-Series",
+      link: "/geneds/SCIS",
+    },
+    {
+      label: "DSSP Scholarship in Practice",
+      link: "/geneds/DSSP",
     },
   ],
 };
