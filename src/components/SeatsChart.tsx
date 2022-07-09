@@ -1,14 +1,5 @@
 import { AxisOptions, Chart } from "react-charts";
-
-interface ISeat {
-  day: number;
-  seats: number;
-}
-
-interface ISeries {
-  label: string;
-  data: ISeat[];
-}
+import type { ISeat, ISeries } from "@/utils/types";
 
 const primaryAxis: AxisOptions<ISeat> = {
   getValue: (datum) => datum.day,

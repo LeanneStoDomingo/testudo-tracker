@@ -6,6 +6,16 @@ export type TSelected = {
   [key in TCategory]: string[];
 };
 
+export interface ISeat {
+  day: number;
+  seats: number;
+}
+
+export interface ISeries {
+  label: string;
+  data: ISeat[];
+}
+
 // https://github.com/vercel/next.js/issues/15913#issuecomment-911684434
 type GetSSGResult<TProps> =
   | { props: TProps }
