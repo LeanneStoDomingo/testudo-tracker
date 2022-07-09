@@ -86,12 +86,48 @@ const main = async () => {
         console.log("Created professors");
 
         const seats = [
-          { totalSeats: 10, openSeats: 10, waitlistSeats: 0, holdfileSeats: 0 },
-          { totalSeats: 10, openSeats: 7, waitlistSeats: 0, holdfileSeats: 1 },
-          { totalSeats: 10, openSeats: 3, waitlistSeats: 0, holdfileSeats: 2 },
-          { totalSeats: 10, openSeats: 0, waitlistSeats: 4, holdfileSeats: 1 },
-          { totalSeats: 10, openSeats: 0, waitlistSeats: 2, holdfileSeats: 0 },
-          { totalSeats: 10, openSeats: 1, waitlistSeats: 0, holdfileSeats: 0 },
+          {
+            number: 0,
+            totalSeats: 10,
+            openSeats: 10,
+            waitlistSeats: 0,
+            holdfileSeats: 0,
+          },
+          {
+            number: 1,
+            totalSeats: 10,
+            openSeats: 7,
+            waitlistSeats: 0,
+            holdfileSeats: 1,
+          },
+          {
+            number: 2,
+            totalSeats: 10,
+            openSeats: 3,
+            waitlistSeats: 0,
+            holdfileSeats: 2,
+          },
+          {
+            number: 3,
+            totalSeats: 10,
+            openSeats: 0,
+            waitlistSeats: 4,
+            holdfileSeats: 1,
+          },
+          {
+            number: 4,
+            totalSeats: 10,
+            openSeats: 0,
+            waitlistSeats: 2,
+            holdfileSeats: 0,
+          },
+          {
+            number: 5,
+            totalSeats: 10,
+            openSeats: 1,
+            waitlistSeats: 0,
+            holdfileSeats: 0,
+          },
         ];
 
         await prisma.section.create({

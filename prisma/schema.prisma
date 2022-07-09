@@ -92,6 +92,8 @@ model Day {
 
   createdAt DateTime @default(now())
 
+  number Int
+
   totalSeats    Int
   openSeats     Int
   waitlistSeats Int
