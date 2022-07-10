@@ -14,7 +14,9 @@ const Professor: NextPage<inferSSGProps<typeof getStaticProps>> = ({
 }) => {
   const router = useRouter();
 
-  const professor = trpc.useQuery(["professor", { slug }]);
+  const professor = trpc.useQuery(["professor", { slug }], {
+    enabled: !!slug,
+  });
 
   if (router.isFallback) return <>Loading...</>;
 

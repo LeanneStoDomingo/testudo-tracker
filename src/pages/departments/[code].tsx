@@ -14,7 +14,9 @@ const Department: NextPage<inferSSGProps<typeof getStaticProps>> = ({
 }) => {
   const router = useRouter();
 
-  const department = trpc.useQuery(["department", { code }]);
+  const department = trpc.useQuery(["department", { code }], {
+    enabled: !!code,
+  });
 
   if (router.isFallback) return <>Loading...</>;
 
