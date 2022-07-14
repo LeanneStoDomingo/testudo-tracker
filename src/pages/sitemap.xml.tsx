@@ -6,7 +6,7 @@ const SiteMap = () => {};
 export const getServerSideProps = async ({
   res,
 }: GetServerSidePropsContext) => {
-  const baseURL = `https://${process.env.VERCEL_URL}`;
+  const baseURL = "https://www.testudotracker.com";
   const staticLinks = ["/about", "/search"];
 
   const courses = await prisma.course.findMany({
