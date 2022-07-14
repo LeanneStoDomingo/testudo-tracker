@@ -4,11 +4,9 @@ import type { Context } from "@/backend/context";
 import {
   exampleCourse,
   exampleDepartment,
-  exampleGened,
   exampleSearch,
   groupings,
 } from "@/utils/constants";
-import { prisma } from "@/backend/db/client";
 import getLatestSemester from "@/backend/utils/getLatestSemester";
 import getSeats from "@/backend/utils/getSeats";
 
@@ -26,7 +24,7 @@ export const appRouter = createRouter()
         sections: z.array(z.string()),
       }),
     }),
-    resolve: ({ input }) => {
+    resolve: async ({ ctx, input }) => {
       return {
         name: exampleCourse.name,
         filters: exampleCourse.filters,
@@ -38,8 +36,8 @@ export const appRouter = createRouter()
     input: z.object({
       code: z.string(),
     }),
-    resolve: async ({ input }) => {
-      const department = await prisma.department.findUniqueOrThrow({
+    resolve: async ({ ctx, input }) => {
+      const department = await ctx.prisma.department.findUniqueOrThrow({
         where: { code: input.code },
         select: {
           id: true,
@@ -47,6 +45,7 @@ export const appRouter = createRouter()
           name: true,
           courses: {
             select: {
+              id: true,
               code: true,
               name: true,
             },
@@ -55,15 +54,19 @@ export const appRouter = createRouter()
       });
 
       const courses = department.courses.map((course) => ({
+        id: course.id,
         link: `/courses/${course.code}`,
         label: `${course.code} - ${course.name}`,
       }));
 
-      const semester = await getLatestSemester();
+      const semester = await getLatestSemester({ ctx });
 
       const seats = await getSeats({
-        course: { department: { id: department.id } },
-        semester: { id: semester.id },
+        ctx,
+        section: {
+          course: { department: { id: department.id } },
+          semester: { id: semester.id },
+        },
       });
 
       return {
@@ -78,27 +81,36 @@ export const appRouter = createRouter()
     input: z.object({
       slug: z.string(),
     }),
-    resolve: async ({ input }) => {
-      const professor = await prisma.professor.findUniqueOrThrow({
+    resolve: async ({ ctx, input }) => {
+      const professor = await ctx.prisma.professor.findUniqueOrThrow({
         where: { slug: input.slug },
       });
 
-      const rawCourses = await prisma.course.findMany({
+      const rawCourses = await ctx.prisma.course.findMany({
         where: {
           sections: { some: { professors: { some: { id: professor.id } } } },
+        },
+        select: {
+          id: true,
+          code: true,
+          name: true,
         },
       });
 
       const courses = rawCourses.map((course) => ({
+        id: course.id,
         link: `/courses/${course.code}`,
         label: `${course.code} - ${course.name}`,
       }));
 
-      const semester = await getLatestSemester();
+      const semester = await getLatestSemester({ ctx });
 
       const seats = await getSeats({
-        professors: { some: { id: professor.id } },
-        semester: { id: semester.id },
+        ctx,
+        section: {
+          professors: { some: { id: professor.id } },
+          semester: { id: semester.id },
+        },
       });
 
       return {
@@ -113,11 +125,40 @@ export const appRouter = createRouter()
     input: z.object({
       code: z.string(),
     }),
-    resolve: async ({ input }) => {
+    resolve: async ({ ctx, input }) => {
+      const gened = await ctx.prisma.gened.findUniqueOrThrow({
+        where: { code: input.code },
+      });
+
+      const rawCourses = await ctx.prisma.course.findMany({
+        where: { geneds: { some: { id: gened.id } } },
+        select: {
+          id: true,
+          code: true,
+          name: true,
+        },
+      });
+
+      const courses = rawCourses.map((course) => ({
+        id: course.id,
+        link: `/courses/${course.code}`,
+        label: `${course.code} - ${course.name}`,
+      }));
+
+      const semester = await getLatestSemester({ ctx });
+
+      const seats = await getSeats({
+        ctx,
+        section: {
+          course: { geneds: { some: { id: gened.id } } },
+          semester: { id: semester.id },
+        },
+      });
       return {
-        name: exampleGened.name,
-        seats: exampleGened.seats,
-        courses: exampleGened.courses,
+        name: gened.name,
+        code: gened.code,
+        courses,
+        seats,
       };
     },
   })
@@ -128,7 +169,7 @@ export const appRouter = createRouter()
       payload: z.string().optional(),
       filter: z.string().optional(),
     }),
-    resolve: async ({ input }) => {
+    resolve: async ({ ctx, input }) => {
       if (!!input.type && !!input.payload) {
         return exampleDepartment.courses.filter((result) => {
           return result.label.toLowerCase().includes(input.query.toLowerCase());

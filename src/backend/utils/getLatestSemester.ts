@@ -1,7 +1,11 @@
-import { prisma } from "@/backend/db/client";
+import type { Context } from "@/backend/context";
 
-const getLatestSemester = async () => {
-  const [semester] = await prisma.semester.findMany({
+interface Args {
+  ctx: Context;
+}
+
+const getLatestSemester = async ({ ctx }: Args) => {
+  const [semester] = await ctx.prisma.semester.findMany({
     where: { endDate: { lt: new Date() } },
     orderBy: { createdAt: "desc" },
     take: 1,

@@ -1,9 +1,14 @@
 import type { Prisma } from "@prisma/client";
 import type { ISeries } from "@/utils/types";
-import { prisma } from "@/backend/db/client";
+import type { Context } from "@/backend/context";
 
-const getSeats = async (section: Prisma.DayWhereInput["section"]) => {
-  const groupedSeats = await prisma.day.groupBy({
+interface Args {
+  ctx: Context;
+  section: Prisma.DayWhereInput["section"];
+}
+
+const getSeats = async ({ ctx, section }: Args) => {
+  const groupedSeats = await ctx.prisma.day.groupBy({
     by: ["number"],
     where: { section },
     _sum: {

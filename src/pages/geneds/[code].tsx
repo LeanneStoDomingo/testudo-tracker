@@ -14,7 +14,9 @@ const Gened: NextPage<inferSSGProps<typeof getStaticProps>> = ({
 }) => {
   const router = useRouter();
 
-  const gened = trpc.useQuery(["gened", { code }]);
+  const gened = trpc.useQuery(["gened", { code }], {
+    enabled: !!code,
+  });
 
   if (router.isFallback) return <>Loading...</>;
 
