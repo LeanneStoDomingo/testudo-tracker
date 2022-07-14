@@ -95,6 +95,7 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
       code: course.code,
       name: course.name,
     },
+    revalidate: 60 * 60 * 24, // 1 day
   };
 };
 
