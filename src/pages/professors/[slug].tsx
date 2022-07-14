@@ -7,6 +7,7 @@ import { trpc } from "@/hooks/trpc";
 import SeatsChart from "@/components/SeatsChart";
 import SearchBar from "@/components/SearchBar";
 import SearchResults from "@/components/SearchResults";
+import { prisma } from "@/backend/db/client";
 
 const Professor: NextPage<inferSSGProps<typeof getStaticProps>> = ({
   slug,
@@ -44,14 +45,24 @@ const Professor: NextPage<inferSSGProps<typeof getStaticProps>> = ({
 export default Professor;
 
 export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
-  if (!params || !params.slug || typeof params.slug !== "string") {
+  if (!params?.slug || typeof params.slug !== "string") {
     return { notFound: true };
   }
 
+  const professor = await prisma.professor.findUnique({
+    where: { slug: params.slug },
+    select: {
+      slug: true,
+      name: true,
+    },
+  });
+
+  if (!professor) return { notFound: true };
+
   return {
     props: {
-      slug: params.slug,
-      name: exampleProfessor.name,
+      slug: professor.slug,
+      name: professor.name,
     },
   };
 };

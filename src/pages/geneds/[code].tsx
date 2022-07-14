@@ -7,6 +7,7 @@ import { exampleGened } from "@/utils/constants";
 import SeatsChart from "@/components/SeatsChart";
 import SearchBar from "@/components/SearchBar";
 import SearchResults from "@/components/SearchResults";
+import { prisma } from "@/backend/db/client";
 
 const Gened: NextPage<inferSSGProps<typeof getStaticProps>> = ({
   code,
@@ -46,21 +47,35 @@ const Gened: NextPage<inferSSGProps<typeof getStaticProps>> = ({
 export default Gened;
 
 export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
-  if (!params || !params.code || typeof params.code !== "string") {
+  if (!params?.code || typeof params.code !== "string") {
     return { notFound: true };
   }
 
+  const gened = await prisma.gened.findUnique({
+    where: { code: params.code },
+    select: {
+      code: true,
+      name: true,
+    },
+  });
+
+  if (!gened) return { notFound: true };
+
   return {
     props: {
-      code: params.code,
-      name: exampleGened.name,
+      code: gened.code,
+      name: gened.name,
     },
   };
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  const geneds = await prisma.gened.findMany({
+    select: { code: true },
+  });
+
   return {
-    paths: exampleGened.paths.map((path) => ({ params: { code: path } })),
+    paths: geneds.map((gened) => ({ params: { code: gened.code } })),
     fallback: true,
   };
 };

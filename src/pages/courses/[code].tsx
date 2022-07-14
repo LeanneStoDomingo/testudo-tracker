@@ -8,6 +8,7 @@ import SeatsChart from "@/components/SeatsChart";
 import useSelectedOptions from "@/hooks/useSelectedOptions";
 import { categories, exampleCourse } from "@/utils/constants";
 import type { inferSSGProps } from "@/utils/types";
+import { prisma } from "@/backend/db/client";
 
 const Course: NextPage<inferSSGProps<typeof getStaticProps>> = ({
   code,
@@ -75,14 +76,24 @@ const Course: NextPage<inferSSGProps<typeof getStaticProps>> = ({
 export default Course;
 
 export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
-  if (!params || !params.code || typeof params.code !== "string") {
+  if (!params?.code || typeof params.code !== "string") {
     return { notFound: true };
   }
 
+  const course = await prisma.course.findUnique({
+    where: { code: params.code },
+    select: {
+      code: true,
+      name: true,
+    },
+  });
+
+  if (!course) return { notFound: true };
+
   return {
     props: {
-      code: params.code,
-      name: exampleCourse.name,
+      code: course.code,
+      name: course.name,
     },
   };
 };
