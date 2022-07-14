@@ -71,17 +71,18 @@ const SearchBar: React.FC<{
               <a>See more results for {query}</a>
             </Link>
           </Combobox.Option>
-          {filteredResults.data?.map((result) => (
-            <Combobox.Option key={result.label} value={result.label}>
-              {({ active }) => (
-                <Link href={result.link}>
-                  <a className={active ? "text-blue-500" : ""}>
-                    {result.label}
-                  </a>
-                </Link>
-              )}
-            </Combobox.Option>
-          ))}
+          {!!query &&
+            filteredResults.data?.map((result) => (
+              <Combobox.Option key={result.label} value={result.label}>
+                {({ active }) => (
+                  <Link href={result.link}>
+                    <a className={active ? "text-blue-500" : ""}>
+                      {result.label}
+                    </a>
+                  </Link>
+                )}
+              </Combobox.Option>
+            ))}
           {filteredResults.data?.length === 0 && <li>No results</li>}
         </Combobox.Options>
       </Combobox>
