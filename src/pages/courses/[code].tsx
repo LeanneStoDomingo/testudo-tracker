@@ -17,7 +17,9 @@ const Course: NextPage<inferSSGProps<typeof getStaticProps>> = ({
 
   const { selected, setSelected, clearSelected } = useSelectedOptions();
 
-  const course = trpc.useQuery(["course", { code, selected }]);
+  const course = trpc.useQuery(["course", { code, selected }], {
+    enabled: !!code && !!selected,
+  });
 
   if (router.isFallback) return <>Loading...</>;
 
