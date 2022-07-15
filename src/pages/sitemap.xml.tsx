@@ -1,11 +1,9 @@
-import type { GetServerSidePropsContext } from "next";
+import type { GetServerSideProps } from "next";
 import { prisma } from "@/backend/db/client";
 
 const SiteMap = () => {};
 
-export const getServerSideProps = async ({
-  res,
-}: GetServerSidePropsContext) => {
+export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   const baseURL = "https://www.testudotracker.com";
   const staticLinks = ["/about", "/search"];
 
