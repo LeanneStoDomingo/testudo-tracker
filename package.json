@@ -15,6 +15,9 @@
     "db:clear": "npm run script scripts/clear-db.ts",
     "db:seed": "npm run script scripts/seed-db.ts"
   },
+  "prisma": {
+    "seed": "npm run db:seed"
+  },
   "dependencies": {
     "@fontsource/inter": "^4.5.10",
     "@headlessui/react": "^1.6.4",
