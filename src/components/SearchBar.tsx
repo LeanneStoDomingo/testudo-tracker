@@ -41,13 +41,13 @@ const SearchBar: React.FC<{
     );
 
     if (index !== -1) {
-      router.push(filteredResults.data[index].link);
+      router.push(filteredResults.data[index]!.link);
       return;
     }
 
     const url =
       filteredResults.data.length === 1
-        ? filteredResults.data[0].link
+        ? filteredResults.data[0]!.link
         : !!filter
         ? `/search?q=${query}&filter=${filter}`
         : `/search?q=${query}`;

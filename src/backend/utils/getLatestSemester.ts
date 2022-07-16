@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import type { Context } from "@/backend/context";
 
 interface Args {
@@ -10,6 +11,10 @@ const getLatestSemester = async ({ ctx }: Args) => {
     orderBy: { createdAt: "desc" },
     take: 1,
   });
+
+  if (!semester) {
+    throw new TRPCError({ code: "NOT_FOUND", message: "No semester found" });
+  }
 
   return semester;
 };

@@ -39,10 +39,10 @@ const getSeats = async ({ ctx, section }: Args) => {
   ];
 
   groupedSeats.forEach(({ number, _sum }) => {
-    seats[0].data.push({ day: number, seats: _sum.totalSeats ?? 0 });
-    seats[1].data.push({ day: number, seats: _sum.openSeats ?? 0 });
-    seats[2].data.push({ day: number, seats: _sum.waitlistSeats ?? 0 });
-    seats[3].data.push({ day: number, seats: _sum.holdfileSeats ?? 0 });
+    seats[0]!.data.push({ day: number, seats: _sum.totalSeats ?? 0 });
+    seats[1]!.data.push({ day: number, seats: _sum.openSeats ?? 0 });
+    seats[2]!.data.push({ day: number, seats: _sum.waitlistSeats ?? 0 });
+    seats[3]!.data.push({ day: number, seats: _sum.holdfileSeats ?? 0 });
   });
 
   return seats;

@@ -49,7 +49,10 @@ export const getGeneds = async () => {
 
         const { code, name } = match.groups;
 
-        return { code, name };
+        return {
+          code: code ?? "",
+          name: name ?? "",
+        };
       })
       .filter((gened) => gened.code !== "" && gened.name !== "");
 
@@ -126,8 +129,8 @@ export const getSections = async (semester: string, course: string) => {
         const seats = {
           total: +section.find(".total-seats-count").text(),
           open: +section.find(".open-seats-count").text(),
-          waitlist: +waitlist || 0,
-          holdfile: +holdfile || 0,
+          waitlist: +(waitlist ?? 0),
+          holdfile: +(holdfile ?? 0),
         };
 
         return { code, professors, seats };

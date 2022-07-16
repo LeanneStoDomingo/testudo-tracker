@@ -9,7 +9,7 @@ import { formattedGroupings, noneSelected } from "@/utils/constants";
 
 const Search = () => {
   const router = useRouter();
-  const q = (router.query.q || "") as string;
+  const q = (router.query.q ?? "") as string;
   const filterParam = router.query.filter as string;
 
   const { selectedFilter, setSelectedFilter } = useSearchFilter(filterParam);

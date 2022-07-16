@@ -53,7 +53,7 @@ const getOptions = (filters: IFilters, selected: TSelected): TOptions => {
               ...filter,
               label: [],
             };
-            return acc || value.some((v) => !f[key].includes(v));
+            return acc || value.some((v) => !f[key]!.includes(v));
           }, false),
       };
     });
