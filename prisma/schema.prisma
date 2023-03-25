@@ -6,12 +6,13 @@ generator client {
 }
 
 datasource db {
-    provider = "sqlite"
+    provider     = "mysql"
     // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.Text annotations in model Account below
     // Further reading:
     // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
     // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-    url      = env("DATABASE_URL")
+    url          = env("DATABASE_URL")
+    relationMode = "prisma"
 }
 
 model Example {
@@ -27,16 +28,17 @@ model Account {
     type              String
     provider          String
     providerAccountId String
-    refresh_token     String? // @db.Text
-    access_token      String? // @db.Text
+    refresh_token     String? @db.Text
+    access_token      String? @db.Text
     expires_at        Int?
     token_type        String?
     scope             String?
-    id_token          String? // @db.Text
+    id_token          String? @db.Text
     session_state     String?
     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@unique([provider, providerAccountId])
+    @@index([userId])
 }
 
 model Session {
@@ -45,6 +47,8 @@ model Session {
     userId       String
     expires      DateTime
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([userId])
 }
 
 model User {
@@ -63,4 +67,94 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+enum Season {
+    Spring
+    Fall
+}
+
+model Semester {
+    id String @id @default(cuid())
+
+    createdAt DateTime @default(now())
+
+    startDate DateTime @unique
+    endDate   DateTime @unique
+
+    season  Season
+    year    Int
+    Section Section[]
+}
+
+model Department {
+    code   String   @id
+    name   String
+    Course Course[]
+}
+
+model Gened {
+    code    String   @id
+    name    String
+    courses Course[]
+}
+
+model Professor {
+    slug String @id
+    name String
+
+    sections Section[]
+}
+
+model Course {
+    code String @id
+    name String
+
+    department     Department @relation(fields: [departmentCode], references: [code])
+    departmentCode String
+
+    geneds Gened[]
+
+    sections Section[]
+
+    @@index([departmentCode])
+}
+
+model Section {
+    id String @id @default(cuid())
+
+    updatedAt DateTime @updatedAt
+
+    code String
+
+    course     Course @relation(fields: [courseCode], references: [code])
+    courseCode String
+
+    professors Professor[]
+
+    semester   Semester @relation(fields: [semesterId], references: [id])
+    semesterId String
+
+    days Day[]
+
+    @@index([courseCode])
+    @@index([semesterId])
+}
+
+model Day {
+    id String @id @default(cuid())
+
+    createdAt DateTime @default(now())
+
+    number Int
+
+    totalSeats    Int
+    openSeats     Int
+    waitlistSeats Int
+    holdfileSeats Int
+
+    section   Section @relation(fields: [sectionId], references: [id])
+    sectionId String
+
+    @@index([sectionId])
 }
