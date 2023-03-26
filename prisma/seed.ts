@@ -1,7 +1,8 @@
 import { PromisePool } from "@supercharge/promise-pool";
+import { Season } from "@prisma/client";
+
 import { prisma } from "@/server/db";
 import * as scraper from "@/server/scraper";
-import { Season } from "@prisma/client";
 
 const semester = "202301";
 
@@ -69,8 +70,8 @@ const clear = async () => {
 const seed = async () => {
   const semesterObj = await prisma.semester.create({
     data: {
-      season: Season.Fall,
-      year: 2022,
+      season: Season.Spring,
+      year: 2023,
       startDate: new Date(2022, 10, 27),
       endDate: new Date(2023, 2, 15),
     },
