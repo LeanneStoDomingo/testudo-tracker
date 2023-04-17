@@ -23,17 +23,57 @@ const inter = Inter({
   variable: "--font-sans",
 });
 
-const getBaseUrl = () => {
-  if (typeof window !== "undefined") return ""; // browser should use relative url
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
-  return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
-};
-
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
+  return (
+    <>
+      <style jsx global>
+        {`
+          :root {
+            --font-sans: ${inter.style.fontFamily};
+          }
+        `}
+      </style>
+      <Head>
+        <title>Testudo Tracker</title>
+        <meta
+          name="description"
+          content="A student run website that tracks seat availability for courses at the University of Maryland, College Park"
+        />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <APIProvider>
+        <SessionProvider session={session}>
+          <header>Header</header>
+          <main>
+            <Component {...pageProps} />
+          </main>
+          <footer>Footer</footer>
+          <Toaster />
+        </SessionProvider>
+      </APIProvider>
+    </>
+  );
+};
+
+export default MyApp;
+
+const APIProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const { queryClient } = useQueryClient();
+  const { trpcClient } = useTRPCClient();
+
+  return (
+    <api.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    </api.Provider>
+  );
+};
+
+const useQueryClient = () => {
   const { toast } = useToast();
+
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -63,6 +103,16 @@ const MyApp: AppType<{ session: Session | null }> = ({
       })
   );
 
+  return { queryClient };
+};
+
+const getBaseUrl = () => {
+  if (typeof window !== "undefined") return ""; // browser should use relative url
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
+  return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
+};
+
+const useTRPCClient = () => {
   const [trpcClient] = useState(() =>
     api.createClient({
       transformer: superjson,
@@ -85,37 +135,5 @@ const MyApp: AppType<{ session: Session | null }> = ({
     })
   );
 
-  return (
-    <>
-      <style jsx global>
-        {`
-          :root {
-            --font-sans: ${inter.style.fontFamily};
-          }
-        `}
-      </style>
-      <Head>
-        <title>Testudo Tracker</title>
-        <meta
-          name="description"
-          content="A student run website that tracks seat availability for courses at the University of Maryland, College Park"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <api.Provider client={trpcClient} queryClient={queryClient}>
-        <QueryClientProvider client={queryClient}>
-          <SessionProvider session={session}>
-            <header>Header</header>
-            <main>
-              <Component {...pageProps} />
-            </main>
-            <footer>Footer</footer>
-            <Toaster />
-          </SessionProvider>
-        </QueryClientProvider>
-      </api.Provider>
-    </>
-  );
+  return { trpcClient };
 };
-
-export default MyApp;
