@@ -82,20 +82,23 @@ model Semester {
     startDate DateTime @unique
     endDate   DateTime @unique
 
-    season  Season
-    year    Int
-    Section Section[]
+    season Season
+    year   Int
+
+    sections Section[]
 }
 
 model Department {
-    code   String   @id
-    name   String
-    Course Course[]
+    code String @id
+    name String
+
+    courses Course[]
 }
 
 model Gened {
-    code    String   @id
-    name    String
+    code String @id
+    name String
+
     courses Course[]
 }
 
