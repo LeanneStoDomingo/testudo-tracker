@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { GetStaticProps, NextPage } from "next";
+import Head from "next/head";
 import {
   CartesianGrid,
   Legend,
@@ -26,6 +27,9 @@ const Course: NextPage<{ code: string }> = ({ code }) => {
 
   return (
     <>
+      <Head>
+        <title>{code} | Testudo Tracker</title>
+      </Head>
       <h1>{code}</h1>
       <p>{course.data.name}</p>
       <ChartWithFilters code={code} />
