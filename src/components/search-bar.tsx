@@ -45,7 +45,7 @@ const SearchBar: React.FC<{ defaultQuery?: string }> = ({
       <form onSubmit={onSubmit}>
         <Input {...form.register("query")} />
         <Button>Search</Button>
-        {search.isLoading && !!query && <Spinner />}
+        {search.isFetching && <Spinner />}
       </form>
       {!!query && (
         <ul>
