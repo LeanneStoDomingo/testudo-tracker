@@ -25,10 +25,12 @@ const Course: NextPage<{ code: string }> = ({ code }) => {
 
   if (!course.data) return <>Course not found</>;
 
+  const headTitle = `${code} | Testudo Tracker`;
+
   return (
     <>
       <Head>
-        <title>{code} | Testudo Tracker</title>
+        <title>{headTitle}</title>
       </Head>
       <h1>{code}</h1>
       <p>{course.data.name}</p>
