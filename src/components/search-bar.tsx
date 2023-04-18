@@ -30,11 +30,15 @@ const SearchBar: React.FC<{ defaultQuery?: string }> = ({
     { enabled: !!debouncedQuery, keepPreviousData: true }
   );
 
+  const apiContext = api.useContext();
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) =>
-    void form.handleSubmit((data) => {
+    void form.handleSubmit(async (data) => {
+      const results = await apiContext.search.fetch({ query: data.query });
+
       const link =
-        search.data?.length === 1 && !!search.data[0]?.link
-          ? search.data[0].link
+        results.length === 1 && !!results[0]
+          ? results[0].link
           : `/search?query=${data.query}`;
 
       void router.push(link);
