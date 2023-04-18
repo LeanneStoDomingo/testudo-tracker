@@ -5,7 +5,7 @@ import { publicProcedure } from "@/server/api/trpc";
 export const searchRouter = publicProcedure
   .input(z.object({ query: z.string() }))
   .query(async ({ ctx, input }) => {
-    const courses = await ctx.prisma.course.findMany({
+    const coursesPromise = ctx.prisma.course.findMany({
       where: {
         OR: [
           {
@@ -22,7 +22,7 @@ export const searchRouter = publicProcedure
       },
     });
 
-    const departments = await ctx.prisma.department.findMany({
+    const departmentsPromise = ctx.prisma.department.findMany({
       where: {
         OR: [
           {
@@ -35,7 +35,7 @@ export const searchRouter = publicProcedure
       },
     });
 
-    const professors = await ctx.prisma.professor.findMany({
+    const professorsPromise = ctx.prisma.professor.findMany({
       where: {
         OR: [
           {
@@ -48,7 +48,7 @@ export const searchRouter = publicProcedure
       },
     });
 
-    const geneds = await ctx.prisma.gened.findMany({
+    const genedsPromise = ctx.prisma.gened.findMany({
       where: {
         OR: [
           {
@@ -60,6 +60,13 @@ export const searchRouter = publicProcedure
         ],
       },
     });
+
+    const [courses, departments, professors, geneds] = await Promise.all([
+      coursesPromise,
+      departmentsPromise,
+      professorsPromise,
+      genedsPromise,
+    ]);
 
     return [
       ...departments.map((department) => ({
