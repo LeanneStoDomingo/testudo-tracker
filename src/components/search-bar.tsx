@@ -1,6 +1,8 @@
 import React from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { useIsFetching } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 import { z } from "zod";
 
 import { api } from "@/utils/api";
@@ -32,14 +34,18 @@ const SearchBar: React.FC<{ defaultQuery?: string }> = ({
 
   const apiContext = api.useContext();
 
+  const searchIsFetching = useIsFetching({
+    queryKey: getQueryKey(api.search, { query }),
+  });
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) =>
-    void form.handleSubmit(async (data) => {
-      const results = await apiContext.search.fetch({ query: data.query });
+    void form.handleSubmit(async () => {
+      const results = await apiContext.search.fetch({ query });
 
       const link =
         results.length === 1 && !!results[0]
           ? results[0].link
-          : `/search?query=${data.query}`;
+          : `/search?query=${query}`;
 
       void router.push(link);
     })(e);
@@ -49,7 +55,7 @@ const SearchBar: React.FC<{ defaultQuery?: string }> = ({
       <form onSubmit={onSubmit}>
         <Input {...form.register("query")} />
         <Button>Search</Button>
-        {search.isFetching && <Spinner />}
+        {!!searchIsFetching && <Spinner />}
       </form>
       {!!query && (
         <ul>
