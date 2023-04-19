@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useIsFetching } from "@tanstack/react-query";
@@ -21,6 +21,8 @@ const SearchBar: React.FC<{ defaultQuery?: string }> = ({
   defaultQuery = "",
 }) => {
   const router = useRouter();
+
+  const [inputIsFocused, setInputIsFocused] = useState(false);
 
   const form = useZodForm({ schema, defaultValues: { query: defaultQuery } });
   const query = form.watch("query").trim();
@@ -53,13 +55,17 @@ const SearchBar: React.FC<{ defaultQuery?: string }> = ({
   return (
     <>
       <form onSubmit={onSubmit}>
-        <Input {...form.register("query")} />
+        <Input
+          {...form.register("query")}
+          onFocus={() => setInputIsFocused(true)}
+          onBlur={() => setInputIsFocused(false)}
+        />
         <Button>Search</Button>
         {!!searchIsFetching && <Spinner />}
       </form>
-      {!!query && (
+      {!!query && inputIsFocused && (
         <ul>
-          {search.data?.map((item) => (
+          {search.data?.slice(0, 10).map((item) => (
             <li key={item.link}>
               <Link href={item.link}>{item.label}</Link>
             </li>
