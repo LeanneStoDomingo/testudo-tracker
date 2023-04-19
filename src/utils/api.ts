@@ -4,12 +4,14 @@
  *
  * We also create a few inference helpers for input and output types.
  */
-import { httpBatchLink, loggerLink } from "@trpc/client";
+import { TRPCClientError, httpBatchLink, loggerLink } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import superjson from "superjson";
+import { QueryCache } from "@tanstack/react-query";
 
 import { type AppRouter } from "@/server/api/root";
+import { toast } from "@/hooks/use-toast";
 
 const getBaseUrl = () => {
   if (typeof window !== "undefined") return ""; // browser should use relative url
@@ -43,6 +45,20 @@ export const api = createTRPCNext<AppRouter>({
           url: `${getBaseUrl()}/api/trpc`,
         }),
       ],
+      queryClientConfig: {
+        queryCache: new QueryCache({
+          onError: (err) => {
+            toast({
+              variant: "destructive",
+              title: "Oops! Something went wrong",
+              description:
+                err instanceof TRPCClientError
+                  ? "Error: " + err.message
+                  : "Please try again later",
+            });
+          },
+        }),
+      },
     };
   },
   /**
