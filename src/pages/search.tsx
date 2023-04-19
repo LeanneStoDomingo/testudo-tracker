@@ -1,12 +1,19 @@
 import { type GetServerSideProps, type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import { useWindowVirtualizer } from "@tanstack/react-virtual";
 
 import { api } from "@/utils/api";
 import SearchBar from "@/components/search-bar";
 
 const Search: NextPage<{ query: string }> = ({ query }) => {
   const search = api.search.useQuery({ query });
+
+  const virtualizer = useWindowVirtualizer({
+    count: search.data?.length ?? 0,
+    estimateSize: () => 100,
+    overscan: 5,
+  });
 
   return (
     <>
@@ -15,13 +22,30 @@ const Search: NextPage<{ query: string }> = ({ query }) => {
       </Head>
       <h1>Search</h1>
       <SearchBar defaultQuery={query} />
-      <ul>
-        {search.data?.map((item) => (
-          <li key={item.link}>
-            <Link href={item.link}>{item.label}</Link>
-          </li>
-        ))}
-      </ul>
+      {!!search.data && (
+        <ul
+          className="relative w-full"
+          style={{ height: virtualizer.getTotalSize() }}
+        >
+          {virtualizer.getVirtualItems().map((item) => {
+            const link = search.data[item.index]?.link;
+
+            if (!link) return null;
+
+            return (
+              <li
+                key={item.key}
+                data-index={item.index}
+                ref={virtualizer.measureElement}
+                className="absolute left-0 top-0 w-full p-2"
+                style={{ transform: `translateY(${item.start}px)` }}
+              >
+                <Link href={link}>{search.data[item.index]?.label}</Link>
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </>
   );
 };
