@@ -1,6 +1,7 @@
 import { type GetServerSideProps, type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 
 import { api } from "@/utils/api";
@@ -46,6 +47,7 @@ const Search: NextPage<{ query: string }> = ({ query }) => {
           })}
         </ul>
       )}
+      <ReactQueryDevtools />
     </>
   );
 };
