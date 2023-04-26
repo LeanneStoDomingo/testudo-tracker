@@ -36,7 +36,7 @@ const SearchBar: React.FC<{ defaultQuery?: string }> = ({
 
   const apiContext = api.useContext();
 
-  const searchIsFetching = useIsFetching({
+  const numSearchIsFetching = useIsFetching({
     queryKey: getQueryKey(api.search, { query }),
   });
 
@@ -61,17 +61,22 @@ const SearchBar: React.FC<{ defaultQuery?: string }> = ({
           onBlur={() => setInputIsFocused(false)}
         />
         <Button>Search</Button>
-        {!!searchIsFetching && <Spinner />}
+        {(numSearchIsFetching > 0 ||
+          ((search.isFetching || search.isPreviousData) && !!query)) && (
+          <Spinner />
+        )}
       </form>
-      {!!query && inputIsFocused && (
-        <ul>
-          {search.data?.slice(0, 10).map((item) => (
-            <li key={item.link}>
-              <Link href={item.link}>{item.label}</Link>
-            </li>
-          ))}
-        </ul>
-      )}
+      {!!query &&
+        inputIsFocused &&
+        (!!debouncedQuery || !search.isPreviousData) && (
+          <ul>
+            {search.data?.slice(0, 10).map((item) => (
+              <li key={item.link}>
+                <Link href={item.link}>{item.label}</Link>
+              </li>
+            ))}
+          </ul>
+        )}
     </>
   );
 };
