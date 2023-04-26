@@ -6,6 +6,7 @@ import { env } from "@/env.mjs";
 
 const get = axios.create({
   baseURL: env.TESTUDO_BASE_URL,
+  timeout: 10000, // 10 seconds
 });
 
 export const getDepartments = async () => {

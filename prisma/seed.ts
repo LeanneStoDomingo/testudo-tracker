@@ -9,7 +9,7 @@ const semester = "202301";
 const departments = [
   { code: "ENGL", name: "English" },
   { code: "CHEM", name: "Chemistry" },
-  { code: "AASP", name: "Asian American Studies" },
+  { code: "AAST", name: "Asian American Studies" },
 ];
 
 const seats = [
@@ -79,29 +79,10 @@ const seed = async () => {
 
   const geneds = await scraper.getGeneds();
 
-  // create geneds
-  await PromisePool.for(geneds)
-    .withConcurrency(100)
-    .process(async (gened) => {
-      try {
-        return await prisma.gened.create({ data: gened });
-      } catch {
-        console.log({ gened });
-        process.exit(1);
-      }
-    });
-
-  // create departments
-  await PromisePool.for(departments)
-    .withConcurrency(100)
-    .process(async (department) => {
-      try {
-        return await prisma.department.create({ data: department });
-      } catch {
-        console.log({ department });
-        process.exit(1);
-      }
-    });
+  await Promise.allSettled([
+    prisma.gened.createMany({ data: geneds }), // create geneds
+    prisma.department.createMany({ data: departments }), // create departments
+  ]);
 
   // scrape courses
   const { results: coursesByDepartments } = await PromisePool.for(departments)
@@ -166,21 +147,8 @@ const seed = async () => {
     .map((section) => section.professors)
     .flat();
 
-  // create/update professors
-  await PromisePool.for(professors)
-    .withConcurrency(1)
-    .process(async (professor) => {
-      try {
-        return await prisma.professor.upsert({
-          where: { slug: professor.slug },
-          update: { name: professor.name },
-          create: professor,
-        });
-      } catch {
-        console.log({ professor });
-        process.exit(1);
-      }
-    });
+  // create professors
+  await prisma.professor.createMany({ data: professors, skipDuplicates: true });
 
   const sections = sectionsByCourses
     .map((sectionByCourse) => {
