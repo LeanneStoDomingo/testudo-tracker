@@ -109,7 +109,7 @@ const SearchBar: React.FC<{ defaultQuery?: string }> = ({
             placeholder: "Search",
             className: "pl-8",
             onKeyDown: (e) => {
-              if (isInputFocused && e.key === "Enter") {
+              if (isInputFocused && !!query && e.key === "Enter") {
                 void onSubmit();
               } else if (e.key.startsWith("Arrow")) {
                 setIsInputFocused(false);
