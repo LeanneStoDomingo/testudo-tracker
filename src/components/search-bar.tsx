@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useId } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useIsFetching } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
+import { useCombobox } from "downshift";
 import { z } from "zod";
+import { Search } from "lucide-react";
 
+import { cn } from "@/utils/cn";
 import { api } from "@/utils/api";
 import { useZodForm } from "@/hooks/use-zod-form";
 import { useDebounce } from "@/hooks/use-debounce";
@@ -20,12 +23,13 @@ const schema = z.object({
 const SearchBar: React.FC<{ defaultQuery?: string }> = ({
   defaultQuery = "",
 }) => {
+  const id = useId();
+
   const router = useRouter();
 
-  const [inputIsFocused, setInputIsFocused] = useState(false);
-
   const form = useZodForm({ schema, defaultValues: { query: defaultQuery } });
-  const query = form.watch("query").trim();
+  const rawQuery = form.watch("query");
+  const query = rawQuery.trim();
 
   const debouncedQuery = useDebounce(query);
 
@@ -34,50 +38,104 @@ const SearchBar: React.FC<{ defaultQuery?: string }> = ({
     { enabled: !!debouncedQuery, keepPreviousData: true }
   );
 
+  const items = search.data?.slice(0, 5) ?? [];
+
   const apiContext = api.useContext();
 
   const numSearchIsFetching = useIsFetching({
     queryKey: getQueryKey(api.search, { query }),
   });
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) =>
-    void form.handleSubmit(async () => {
-      const results = await apiContext.search.fetch({ query });
+  const {
+    isOpen,
+    getMenuProps,
+    getInputProps,
+    highlightedIndex,
+    getItemProps,
+    selectedItem,
+  } = useCombobox({
+    items,
+    itemToString: (item) => item?.label ?? "",
+  });
 
-      const link =
-        results.length === 1 && !!results[0]
-          ? results[0].link
-          : `/search?query=${query}`;
+  const onSubmit = async () => {
+    const results = await apiContext.search.fetch({ query });
 
-      void router.push(link);
+    const link =
+      results.length === 1 && !!results[0]
+        ? results[0].link
+        : `/search?query=${query}`;
+
+    void router.push(link);
+  };
+
+  const onSubmitForm = (e: React.FormEvent<HTMLFormElement>) =>
+    void form.handleSubmit(() => {
+      void onSubmit();
     })(e);
 
+  const isListboxOpen =
+    isOpen && !!query && (!!debouncedQuery || !search.isPreviousData);
+
   return (
-    <>
-      <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmitForm}>
+      <div className="flex items-center">
+        {numSearchIsFetching > 0 ||
+        ((search.isFetching || search.isPreviousData) && !!query) ? (
+          <Spinner className="absolute m-2 h-4 w-4" />
+        ) : (
+          <Search className="absolute m-2 h-4 w-4" />
+        )}
         <Input
-          {...form.register("query")}
-          onFocus={() => setInputIsFocused(true)}
-          onBlur={() => setInputIsFocused(false)}
+          {...getInputProps({
+            id: `input-${id}`,
+            "aria-controls": `input-${id}`,
+            "aria-labelledby": `input-${id}`,
+            type: "search",
+            placeholder: "Search",
+            className: "pl-8",
+            onKeyDown: (e) => {
+              if (e.key === "Enter") {
+                void onSubmit();
+              }
+            },
+            value: rawQuery,
+            ...form.register("query"),
+          })}
         />
-        <Button>Search</Button>
-        {(numSearchIsFetching > 0 ||
-          ((search.isFetching || search.isPreviousData) && !!query)) && (
-          <Spinner />
-        )}
-      </form>
-      {!!query &&
-        inputIsFocused &&
-        (!!debouncedQuery || !search.isPreviousData) && (
-          <ul>
-            {search.data?.slice(0, 10).map((item) => (
-              <li key={item.link}>
-                <Link href={item.link}>{item.label}</Link>
-              </li>
-            ))}
-          </ul>
-        )}
-    </>
+      </div>
+      <ul
+        {...getMenuProps({
+          id: `ul-${id}`,
+          "aria-labelledby": `ul-${id}`,
+          className: cn(
+            "absolute z-10 mt-1 max-h-80 w-full bg-white p-0 shadow-md",
+            !(isListboxOpen && !!items.length) && "hidden"
+          ),
+        })}
+      >
+        {isListboxOpen &&
+          items.map((item, index) => (
+            <li
+              key={item.link}
+              {...getItemProps({
+                item,
+                index,
+                className: cn(
+                  highlightedIndex === index && "bg-blue-300",
+                  selectedItem === item && "font-bold",
+                  "shadow-sm"
+                ),
+              })}
+            >
+              <Link href={item.link} className="flex px-3 py-2">
+                {item.label}
+              </Link>
+            </li>
+          ))}
+      </ul>
+      <Button type="submit">Search</Button>
+    </form>
   );
 };
 
