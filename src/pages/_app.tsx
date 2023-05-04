@@ -37,11 +37,13 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <SessionProvider session={session}>
-        <Header />
-        <main>
-          <Component {...pageProps} />
-        </main>
-        <Footer />
+        <div className="flex min-h-screen flex-col">
+          <Header />
+          <main>
+            <Component {...pageProps} />
+          </main>
+          <Footer />
+        </div>
         <Toaster />
       </SessionProvider>
     </>
@@ -57,7 +59,7 @@ const Header: React.FC = () => {
 };
 
 const Footer: React.FC = () => {
-  return <footer>Footer</footer>;
+  return <footer className="mt-auto">Footer</footer>;
 };
 
 export default api.withTRPC(MyApp);
