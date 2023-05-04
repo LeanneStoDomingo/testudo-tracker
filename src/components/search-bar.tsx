@@ -1,4 +1,4 @@
-import React, { useId } from "react";
+import React, { useId, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useIsFetching } from "@tanstack/react-query";
@@ -27,6 +27,8 @@ const SearchBar: React.FC<{ defaultQuery?: string }> = ({
 
   const router = useRouter();
 
+  const [isInputFocused, setIsInputFocused] = useState(false);
+
   const form = useZodForm({ schema, defaultValues: { query: defaultQuery } });
   const rawQuery = form.watch("query");
   const query = rawQuery.trim();
@@ -50,12 +52,16 @@ const SearchBar: React.FC<{ defaultQuery?: string }> = ({
     isOpen,
     getMenuProps,
     getInputProps,
+    getLabelProps,
     highlightedIndex,
     getItemProps,
     selectedItem,
   } = useCombobox({
     items,
     itemToString: (item) => item?.label ?? "",
+    onSelectedItemChange: (item) => {
+      void router.push(item.selectedItem?.link ?? `/search?query=${query}`);
+    },
   });
 
   const onSubmit = async () => {
@@ -80,12 +86,20 @@ const SearchBar: React.FC<{ defaultQuery?: string }> = ({
   return (
     <form onSubmit={onSubmitForm}>
       <div className="flex items-center">
-        {numSearchIsFetching > 0 ||
-        ((search.isFetching || search.isPreviousData) && !!query) ? (
-          <Spinner className="absolute m-2 h-4 w-4" />
-        ) : (
-          <Search className="absolute m-2 h-4 w-4" />
-        )}
+        <label
+          {...getLabelProps({
+            id: `label-${id}`,
+            htmlFor: `input-${id}`,
+            className: "absolute m-2 h-4 w-4",
+          })}
+        >
+          {numSearchIsFetching > 0 ||
+          ((search.isFetching || search.isPreviousData) && !!query) ? (
+            <Spinner className="h-full w-full" />
+          ) : (
+            <Search className="h-full w-full" />
+          )}
+        </label>
         <Input
           {...getInputProps({
             id: `input-${id}`,
@@ -95,12 +109,17 @@ const SearchBar: React.FC<{ defaultQuery?: string }> = ({
             placeholder: "Search",
             className: "pl-8",
             onKeyDown: (e) => {
-              if (e.key === "Enter") {
+              if (isInputFocused && e.key === "Enter") {
                 void onSubmit();
+              } else if (e.key.startsWith("Arrow")) {
+                setIsInputFocused(false);
               }
             },
             value: rawQuery,
-            ...form.register("query"),
+            onFocus: () => setIsInputFocused(true),
+            ...form.register("query", {
+              onBlur: () => setIsInputFocused(false),
+            }),
           })}
         />
       </div>
