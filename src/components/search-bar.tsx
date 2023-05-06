@@ -1,9 +1,10 @@
-import React, { useId, useState } from "react";
+import React, { useId } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useIsFetching } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
 import { useCombobox } from "downshift";
+import { useController } from "react-hook-form";
 import { z } from "zod";
 import { Search } from "lucide-react";
 
@@ -27,45 +28,75 @@ const SearchBar: React.FC<{ defaultQuery?: string }> = ({
 
   const router = useRouter();
 
-  const [isInputFocused, setIsInputFocused] = useState(false);
-
   const form = useZodForm({ schema, defaultValues: { query: defaultQuery } });
-  const rawQuery = form.watch("query");
-  const query = rawQuery.trim();
+  const controller = useController({ name: "query", control: form.control });
 
+  const query = form.watch("query").trim();
   const debouncedQuery = useDebounce(query);
 
-  const search = api.search.useQuery(
+  const search = api.search.getAll.useQuery(
     { query: debouncedQuery },
     { enabled: !!debouncedQuery, keepPreviousData: true }
   );
 
-  const items = search.data?.slice(0, 5) ?? [];
-
   const apiContext = api.useContext();
 
   const numSearchIsFetching = useIsFetching({
-    queryKey: getQueryKey(api.search, { query }),
+    queryKey: getQueryKey(api.search.getAll, { query }),
   });
+
+  const items = search.data?.slice(0, 5) ?? [];
 
   const {
     isOpen,
-    getMenuProps,
-    getInputProps,
-    getLabelProps,
     highlightedIndex,
-    getItemProps,
     selectedItem,
+    getLabelProps,
+    getInputProps,
+    getMenuProps,
+    getItemProps,
   } = useCombobox({
     items,
     itemToString: (item) => item?.label ?? "",
-    onSelectedItemChange: (item) => {
-      void router.push(item.selectedItem?.link ?? `/search?query=${query}`);
+    onSelectedItemChange: (e) => {
+      if (e.type === "__input_keydown_enter__" && !!e.selectedItem?.link) {
+        void router.push(e.selectedItem.link);
+      }
+    },
+    onInputValueChange: (e) => {
+      controller.field.onChange(e.inputValue);
+    },
+    onStateChange: (e) => {
+      if (e.type === "__input_keydown_enter__" && !e.isOpen) {
+        void onSubmit();
+      }
+    },
+    onHighlightedIndexChange: (e) => {
+      const highlightedIndex = e.highlightedIndex ?? -1;
+
+      if (highlightedIndex === -1) return;
+
+      const highlightedItem = items[highlightedIndex];
+
+      // TODO: prefetch professor/department/gened data when those pages are implemented
+      if (!highlightedItem || highlightedItem.type !== "course") return;
+
+      const code = highlightedItem.link.split("/")[2];
+
+      if (!code) return;
+
+      void apiContext.course.getFilters.prefetch({ code });
+      void apiContext.course.getSeats.prefetch({
+        code,
+        semester: "",
+        professor: "",
+        section: "",
+      });
     },
   });
 
   const onSubmit = async () => {
-    const results = await apiContext.search.fetch({ query });
+    const results = await apiContext.search.getAll.fetch({ query });
 
     const link =
       results.length === 1 && !!results[0]
@@ -108,18 +139,10 @@ const SearchBar: React.FC<{ defaultQuery?: string }> = ({
             type: "search",
             placeholder: "Search",
             className: "pl-8",
-            onKeyDown: (e) => {
-              if (isInputFocused && !!query && e.key === "Enter") {
-                void onSubmit();
-              } else if (e.key.startsWith("Arrow")) {
-                setIsInputFocused(false);
-              }
-            },
-            value: rawQuery,
-            onFocus: () => setIsInputFocused(true),
-            ...form.register("query", {
-              onBlur: () => setIsInputFocused(false),
-            }),
+            name: controller.field.name,
+            ref: controller.field.ref,
+            value: controller.field.value,
+            onBlur: controller.field.onBlur,
           })}
         />
       </div>

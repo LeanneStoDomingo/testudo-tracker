@@ -8,7 +8,7 @@ import { api } from "@/utils/api";
 import SearchBar from "@/components/search-bar";
 
 const Search: NextPage<{ query: string }> = ({ query }) => {
-  const search = api.search.useQuery({ query });
+  const search = api.search.getAll.useQuery({ query });
 
   const virtualizer = useWindowVirtualizer({
     count: search.data?.length ?? 0,
