@@ -125,6 +125,7 @@ const SearchBar: React.FC<{ defaultQuery?: string }> = ({
           })}
         >
           {numSearchIsFetching > 0 ||
+          query !== debouncedQuery ||
           ((search.isFetching || search.isPreviousData) && !!query) ? (
             <Spinner className="h-full w-full" />
           ) : (
