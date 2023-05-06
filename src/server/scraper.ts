@@ -1,12 +1,23 @@
 import axios from "axios";
+import axiosRetry from "axios-retry";
 import * as cheerio from "cheerio";
 import slugify from "slugify";
 
 import { env } from "@/env.mjs";
 
-const get = axios.create({
-  baseURL: env.TESTUDO_BASE_URL,
-  timeout: 10000, // 10 seconds
+const get = axios.create({ baseURL: env.TESTUDO_BASE_URL });
+axiosRetry(get, {
+  retries: 3,
+  onRetry: (retryCount, error) => {
+    console.log("Retrying...", {
+      url: error.config?.url,
+      retryCount,
+      code: error.code,
+      message: error.message,
+      name: error.name,
+      cause: error.cause,
+    });
+  },
 });
 
 export const getDepartments = async () => {
