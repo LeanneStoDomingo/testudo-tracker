@@ -3,9 +3,11 @@ import { Inter } from "next/font/google";
 import Head from "next/head";
 import Link from "next/link";
 import { type Session } from "next-auth";
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider, signOut, useSession } from "next-auth/react";
 
 import { api } from "@/utils/api";
+import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/toaster";
 
 import "@/styles/globals.css";
@@ -51,9 +53,23 @@ const MyApp: AppType<{ session: Session | null }> = ({
 };
 
 const Header: React.FC = () => {
+  const { status } = useSession();
+  const { toast } = useToast();
+
+  const onClick = async () => {
+    await signOut({ redirect: false });
+    toast({
+      title: "Successfully logged out",
+      className: "bg-green-500 text-white",
+    });
+  };
+
   return (
     <header>
       <Link href="/">Header</Link>
+      {status === "authenticated" && (
+        <Button onClick={() => void onClick()}>Log Out</Button>
+      )}
     </header>
   );
 };

@@ -6,6 +6,7 @@ import {
 } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { type Role } from "@prisma/client";
 import { env } from "@/env.mjs";
 import { prisma } from "@/server/db";
 
@@ -19,15 +20,15 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      role: Role;
       // ...other properties
-      // role: UserRole;
     } & DefaultSession["user"];
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    role: Role;
+    // ...other properties
+  }
 }
 
 /**
@@ -42,8 +43,47 @@ export const authOptions: NextAuthOptions = {
       user: {
         ...session.user,
         id: user.id,
+        role: user.role,
       },
     }),
+    // only allow users currently in the db to sign in
+    signIn: async ({ user }) => {
+      if (!user.email) return false;
+
+      const dbUser = await prisma.user.findUnique({
+        where: { email: user.email },
+        select: {
+          id: true,
+          _count: { select: { accounts: true } },
+        },
+      });
+
+      if (!dbUser) return false;
+
+      if (dbUser._count.accounts === 0) {
+        const createAccount = prisma.account.create({
+          data: {
+            user: { connect: { id: dbUser.id } },
+            provider: "google",
+            providerAccountId: user.id,
+            type: "oauth",
+          },
+        });
+
+        const updateUser = prisma.user.update({
+          where: { id: dbUser.id },
+          data: {
+            name: user.name,
+            email: user.email,
+            image: user.image,
+          },
+        });
+
+        await Promise.allSettled([createAccount, updateUser]);
+      }
+
+      return true;
+    },
   },
   adapter: PrismaAdapter(prisma),
   providers: [

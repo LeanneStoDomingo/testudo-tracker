@@ -68,6 +68,7 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
+import { Role } from "@prisma/client";
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
@@ -128,3 +129,21 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
  * @see https://trpc.io/docs/procedures
  */
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+
+/**
+ * Reusable middleware that enforces users are logged in
+ * and have the ADMIN role before running the procedure.
+ */
+const enforceUserIsAdmin = enforceUserIsAuthed.unstable_pipe(
+  ({ ctx, next }) => {
+    if (ctx.session.user.role !== Role.ADMIN) {
+      throw new TRPCError({ code: "FORBIDDEN" });
+    }
+    return next();
+  }
+);
+
+/**
+ * Admin (authenticated) procedure
+ */
+export const adminProcedure = t.procedure.use(enforceUserIsAdmin);
