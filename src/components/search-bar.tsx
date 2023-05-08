@@ -67,7 +67,7 @@ const SearchBar: React.FC<{ defaultQuery?: string }> = ({
       controller.field.onChange(e.inputValue);
     },
     onStateChange: (e) => {
-      if (e.type === "__input_keydown_enter__" && !e.isOpen) {
+      if (e.type === "__input_keydown_enter__" && !e.selectedItem && !!query) {
         void onSubmit();
       }
     },
