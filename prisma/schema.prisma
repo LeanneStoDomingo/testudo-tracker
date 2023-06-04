@@ -147,6 +147,7 @@ model Section {
 
     days Day[]
 
+    @@unique(fields: [code, courseCode, semesterId], name: "sectionIdentifier")
     @@index([courseCode])
     @@index([semesterId])
 }

@@ -33,7 +33,7 @@ export const courseRouter = createTRPCRouter({
       if (!inputSemesterId) {
         const [latestSemester] = await ctx.prisma.semester.findMany({
           select: { id: true },
-          orderBy: { createdAt: "desc" },
+          orderBy: { startDate: "desc" },
           take: 1,
         });
 
@@ -142,7 +142,7 @@ export const courseRouter = createTRPCRouter({
 
       const [latestSemester] = await ctx.prisma.semester.findMany({
         select: { id: true, season: true, year: true },
-        orderBy: { createdAt: "desc" },
+        orderBy: { startDate: "desc" },
         take: 1,
       });
 
